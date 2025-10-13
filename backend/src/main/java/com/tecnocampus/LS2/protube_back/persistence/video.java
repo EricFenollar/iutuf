@@ -16,7 +16,7 @@ import jakarta.persistence.Id;
 @Table(name = "videos")
 public class video {
     @Id
-    private String id;
+    private Long id;
 
     private String title;
 

@@ -99,6 +99,7 @@ public class AppStartupRunner implements ApplicationRunner {
     }
     private video parseVideo(File jsonFile, String storeDir) {
         try {
+            LOG.info("📄 Processing file: {}",jsonFile.getName());
             // 2️⃣ 使用 Jackson 将 JSON 文件转换为 Video 对象
             video video = mapper.readValue(jsonFile, video.class);
 
