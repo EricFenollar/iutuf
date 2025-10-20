@@ -4,7 +4,7 @@ import { getEnv } from './utils/Env';
 
 type LoadingState = 'loading' | 'success' | 'error' | 'idle';
 
-const ALL_VIDEOS_URL = `${getEnv().API_BASE_URL}/videos`;
+const ALL_VIDEOS_URL = `${getEnv().API_BASE_URL}/api/videos`;
 export function useAllVideos() {
   const [value, setValue] = useState<string[]>([]);
   const [message, setMessage] = useState<string>('Loading...');

@@ -13,6 +13,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
+@CrossOrigin(origins = "http://localhost:5173")
 @RestController
 @RequestMapping("/api/videos")
 public class VideosController {
@@ -23,7 +24,7 @@ public class VideosController {
 
 
     @GetMapping("")
-    public ResponseEntity<List<String>> getVideos() {
+    public ResponseEntity<List<video>> getVideos() {
         return ResponseEntity.ok().body(videoService.getVideos());
 
     }

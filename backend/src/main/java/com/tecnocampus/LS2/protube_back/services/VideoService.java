@@ -19,9 +19,9 @@ public class VideoService {
         this.videoRepository = videoRepository;
     }
 
-    public List<String> getVideos() {
+    public List<video> getVideos() {
 
-        return List.of("video1", "video2");
+        return videoRepository.findAll();
     }
 
 
