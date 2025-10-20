@@ -23,7 +23,9 @@ const VideoGrid = () => {
     <ul className="row g-4">
       {someData?.map((video: any) => (
         <li key={video.id} className="col-md-4">
-          <div className="card shadow-sm">
+          <div className="card shadow-sm"
+               onClick={(e)=>window.location.href = `${getEnv().API_BASE_URL}/api/videos/${video.id}`}
+          >
             <img
               src={`${getEnv().API_BASE_URL}/api/videos/thumbnail/${video.id}`}
               className="card-img-top"
@@ -31,7 +33,6 @@ const VideoGrid = () => {
             />
             <div className="card-body">
               <h5 className="card-title">{video.title}</h5>
-              <video controls width="100%" src={`${getEnv().API_BASE_URL}/api/videos/${video.id}`} />
               <p className="text-muted mt-2">Author: {video.user}</p>
             </div>
           </div>
