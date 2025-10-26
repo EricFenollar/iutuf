@@ -1,6 +1,6 @@
 package com.tecnocampus.LS2.protube_back.services;
 
-import com.tecnocampus.LS2.protube_back.persistence.video;
+import com.tecnocampus.LS2.protube_back.persistence.Video;
 import com.tecnocampus.LS2.protube_back.repository.videoReposity;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -26,18 +26,18 @@ class VideoServiceTest {
     @Test
     void shouldReturnAllVideosFromRepository() {
         // 准备假数据
-        video v1 = new video();
+        Video v1 = new Video();
         v1.setId(Long.valueOf("1"));
         v1.setTitle("Video 1");
 
-        video v2 = new video();
+        Video v2 = new Video();
         v2.setId(Long.valueOf("2"));
         v2.setTitle("Video 2");
 
         when(videoRepository.findAll()).thenReturn(List.of(v1, v2));
 
         // 调用方法
-        List<video> result = videoService.getVideos();
+        List<Video> result = videoService.getVideos();
 
         // 验证
         assertEquals(2, result.size());

@@ -4,8 +4,6 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 import jakarta.persistence.Id;
@@ -14,7 +12,7 @@ import jakarta.persistence.Id;
 @Data
 @Entity
 @Table(name = "videos")
-public class video {
+public class Video {
     @Id
     private Long id;
 

@@ -1,6 +1,6 @@
 package com.tecnocampus.LS2.protube_back.services;
 
-import com.tecnocampus.LS2.protube_back.persistence.video;
+import com.tecnocampus.LS2.protube_back.persistence.Video;
 import com.tecnocampus.LS2.protube_back.repository.videoReposity;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -19,16 +19,16 @@ public class VideoService {
         this.videoRepository = videoRepository;
     }
 
-    public List<video> getVideos() {
+    public List<Video> getVideos() {
 
         return videoRepository.findAll();
     }
 
 
-    public video getVideoById(Long id) {
+    public Video getVideoById(Long id) {
         //使用findByID从Repository获取视频，如果找不到返回一个404的错误，也就是异常
         //Usar findBYiD para obener el vídeo del reposity,si no se encyentra , devolver un error 404
-        video v = videoRepository.findById(Long.valueOf(String.valueOf(id)))
+        Video v = videoRepository.findById(Long.valueOf(String.valueOf(id)))
                 .orElseThrow(() -> new RuntimeException("Video not found"));
 
         // 如果数据库中没有路径，就自动补上
@@ -43,7 +43,7 @@ public class VideoService {
         return v;
     }
     public String getThumbnailById(Long id){
-        video v=  videoRepository.findById(Long.valueOf(String.valueOf(id))).orElseThrow(()->new RuntimeException("Video not found"));
+        Video v=  videoRepository.findById(Long.valueOf(String.valueOf(id))).orElseThrow(()->new RuntimeException("Video not found"));
         if(v.getPath()==null||v.getPath().isEmpty()){
             if(v.getFileName()!=null&&!v.getFileName().isEmpty()){
                 return videoDir+"/"+v.getFileName()+".png";

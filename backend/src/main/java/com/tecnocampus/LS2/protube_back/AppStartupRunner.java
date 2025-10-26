@@ -1,7 +1,7 @@
 package com.tecnocampus.LS2.protube_back;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.tecnocampus.LS2.protube_back.persistence.video;
+import com.tecnocampus.LS2.protube_back.persistence.Video;
 import com.tecnocampus.LS2.protube_back.repository.videoReposity;
 import com.tecnocampus.LS2.protube_back.services.VideoService;
 import org.slf4j.Logger;
@@ -14,12 +14,10 @@ import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Component
 public class AppStartupRunner implements ApplicationRunner {
@@ -68,7 +66,7 @@ public class AppStartupRunner implements ApplicationRunner {
 
         try {
             // 2️⃣ 构建视频列表
-            List<video> videos = buildVideoList(metaDir, storeDir);
+            List<Video> videos = buildVideoList(metaDir, storeDir);
 
             // 3️⃣ 保存到数据库
             if (!videos.isEmpty()) {
@@ -83,7 +81,7 @@ public class AppStartupRunner implements ApplicationRunner {
         }
     }
 
-    private List<video> buildVideoList(String metaDir, String storeDir) {
+    private List<Video> buildVideoList(String metaDir, String storeDir) {
         try {
             // 1️⃣ 扫描目录，过滤出所有 .json 文件
             return Files.list(Paths.get(metaDir))
@@ -97,11 +95,11 @@ public class AppStartupRunner implements ApplicationRunner {
             return List.of();  // 返回空列表
         }
     }
-    private video parseVideo(File jsonFile, String storeDir) {
+    private Video parseVideo(File jsonFile, String storeDir) {
         try {
             LOG.info("📄 Processing file: {}",jsonFile.getName());
             // 2️⃣ 使用 Jackson 将 JSON 文件转换为 Video 对象
-            video video = mapper.readValue(jsonFile, video.class);
+            Video video = mapper.readValue(jsonFile, Video.class);
 
             // 3️⃣ 设置视频文件名和完整路径
             String fileName = video.getId() + ".mp4";
