@@ -7,7 +7,7 @@ function Home() {
     <div className="App">
       <header className="App-header">
         <img src="/protube-logo-removebg-preview.png" className="App-logo" alt="logo" />
-          <ContentApp />
+        <ContentApp />
       </header>
     </div>
   );
