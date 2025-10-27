@@ -10,6 +10,7 @@ import static org.junit.Assert.assertNotNull;
 
 @SpringBootTest({
         "pro_tube.store.dir=c:",
+        "pro_tube.metadata.dir=c:",
         "pro_tube.load_initial_data=false"
 })
 class ProtubeBackApplicationTests {
