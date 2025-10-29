@@ -37,9 +37,15 @@ const VideoCard = ({ video }) => {
             }}
           />
         </div>
-        <div className="card-body text-center">
+        <div className="card-body text-center"
+             style={{
+                 backgroundColor: '#000',
+                 color: '#fff',
+                 padding: '1%',
+             }}
+        >
           <h5 className="card-title">{video.title}</h5>
-          <p className="text-muted mt-2">Author: {video.user}</p>
+          <p style={{ margin: 0, color: '#fff' }}>Author: {video.user}</p>
         </div>
       </div>
     </li>
