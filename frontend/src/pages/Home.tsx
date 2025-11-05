@@ -2,6 +2,7 @@ import './Home.css';
 import { useAllVideos } from '../useAllVideos';
 import VideoGrid from '../components/VideoGrid';
 import { useState, useEffect } from 'react';
+import { Link } from "react-router-dom";
 
 function Home() {
     const { loading, message, value: allVideos } = useAllVideos();
@@ -46,6 +47,10 @@ function Home() {
                       value={searchTerm}
                       onChange={(e) => setSearchTerm(e.target.value)}
                   />
+                  {/*Enlace a Login */}
+                  <a href="/login" className="login-link">
+                      Login
+                  </a>
               </div>
           </header>
 
