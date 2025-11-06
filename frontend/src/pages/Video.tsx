@@ -44,9 +44,7 @@ function Video() {
           <div style={styles.videoInfo}>
             <h3 style={styles.videoTitle}>{video.title}</h3>
           </div>
-          <div style={styles.videoDescription}>
-            {video.meta.description || "No description available."}
-          </div>
+          <div style={styles.videoDescription}>{video.meta.description || 'No description available.'}</div>
 
           <div style={styles.commentTitle}>Comments</div>
           <div style={styles.commentWrapper}>

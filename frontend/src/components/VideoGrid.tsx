@@ -1,15 +1,15 @@
 import VideoCard from './VideoCard';
 
 interface VideoGridProps {
-    videos: any[];
+  videos: any[];
 }
 const VideoGrid = ({ videos }: VideoGridProps) => {
   return (
     <div>
       {/* GRID DE TARJETAS */}
       <ul
-          className="row g-4"
-          style={{
+        className="row g-4"
+        style={{
           padding: '3%',
           listStyle: 'none',
           margin: 0,
