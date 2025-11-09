@@ -2,12 +2,14 @@ import './Home.css';
 import { useAllVideos } from '../useAllVideos';
 import VideoGrid from '../components/VideoGrid';
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import {Link, useNavigate} from 'react-router-dom';
 
 function Home() {
   const { loading, message, value: allVideos } = useAllVideos();
   const [displayVideos, setDisplayVideos] = useState<any[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (loading === 'success' && allVideos) {
@@ -53,7 +55,9 @@ function Home() {
             onChange={(e) => setSearchTerm(e.target.value)}
           />
           {/*Enlace a Login */}
-          <a href="/login" className="login-link">
+          <a href="/login" className="login-link"
+             onClick={ () => navigate("/login")}
+          >
             Login
           </a>
         </div>
