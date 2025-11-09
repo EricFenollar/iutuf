@@ -1,19 +1,9 @@
-import { useState, useEffect } from 'react';
-import { getEnv } from '../utils/Env';
 import VideoCard from './VideoCard';
 
-const VideoGrid = () => {
-  const [videos, setVideos] = useState<any[]>([]);
-
-  useEffect(() => {
-    fetch(`${getEnv().API_BASE_URL}/api/videos`)
-      .then((res) => res.json())
-      .then((data) => {
-        const videoArray = Array.isArray(data) ? data : data.videos || data.content || [];
-        setVideos(videoArray);
-      });
-  }, []);
-
+interface VideoGridProps {
+  videos: any[];
+}
+const VideoGrid = ({ videos }: VideoGridProps) => {
   return (
     <div>
       {/* GRID DE TARJETAS */}
@@ -26,6 +16,7 @@ const VideoGrid = () => {
           display: 'flex',
           flexWrap: 'wrap',
           gap: '2%',
+          justifyContent: 'center',
         }}
       >
         {videos.map((video) => (
