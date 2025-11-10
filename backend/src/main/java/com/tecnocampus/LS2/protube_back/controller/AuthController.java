@@ -25,12 +25,28 @@ public class AuthController {
         return ResponseEntity.ok().body("User registered successfully");
     }
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginRequest request){
-        if(!userService.existsByUsername(request.getUsername())){
-            return ResponseEntity.badRequest().body("Invalid username or password");
+    public ResponseEntity<?> login(@RequestBody User loginUser) {
+        // 1️⃣ Find user by username
+        User existingUser = userService.findByUsername(loginUser.getUsername());
+        if (existingUser == null) {
+            return ResponseEntity.status(404).body("User not found");
         }
-        return ResponseEntity.ok().body("User registered successfully");
+
+        // 2️⃣ Compare password (plain text vs encrypted one)
+        boolean match = userService.checkPassword(
+                loginUser.getPassword(),
+                existingUser.getPassword()
+        );
+
+        // 3️⃣ Handle incorrect password
+        if (!match) {
+            return ResponseEntity.status(401).body("Incorrect password");
+        }
+
+        // 4️⃣ Successful login
+        return ResponseEntity.ok("Login successful ");
     }
+
     @PostMapping("/logout")
     public ResponseEntity<?> logout(){
        //Todo:
