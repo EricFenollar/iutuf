@@ -3,13 +3,14 @@ import { useAllVideos } from '../useAllVideos';
 import VideoGrid from '../components/VideoGrid';
 import { useState, useEffect } from 'react';
 import {Link, useNavigate} from 'react-router-dom';
+import {useAuth} from "../context/AuthContext";
 
 function Home() {
   const { loading, message, value: allVideos } = useAllVideos();
   const [displayVideos, setDisplayVideos] = useState<any[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
-
-  const navigate = useNavigate();
+  // @ts-ignore
+  const { isAuthenticated, logout } = useAuth();
 
   useEffect(() => {
     if (loading === 'success' && allVideos) {
@@ -55,11 +56,12 @@ function Home() {
             onChange={(e) => setSearchTerm(e.target.value)}
           />
           {/*Enlace a Login */}
-          <a href="/login" className="login-link"
-             onClick={ () => navigate("/login")}
+          <Link to={isAuthenticated ? "/" : "/login"}
+                className="login-link"
+                onClick={isAuthenticated ? logout : undefined}
           >
-            Login
-          </a>
+            {isAuthenticated ? "Logout" : "Login"}
+          </Link>
         </div>
       </header>
 

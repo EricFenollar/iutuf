@@ -1,14 +1,39 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import { getEnv } from '../utils/Env';
 import { useEffect, useState } from 'react';
-import axios, { AxiosError } from 'axios';
+import { useAuth } from "../context/AuthContext";
 
 type LoadingState = 'loading' | 'success' | 'error' | 'idle';
 function Video() {
   const { id } = useParams();
   const navigate = useNavigate();
+  // @ts-ignore
+  const { username } = useAuth();
 
   const [video, setVideo] = useState<any | null>(null);
+
+  const [commentText, setCommentText] = useState("");
+
+  const comment = async (e) => {
+    try{
+      if (e.key === "Enter" && commentText.trim() !== "") {
+        comment(commentText);    // llama a tu función comment
+
+        const response = await fetch(`${getEnv().API_BASE_URL}/api/videos/${id}/comments`, {
+          method: "POST",
+          headers: {"Content-Type": "application/json"},
+          body: JSON.stringify({text: commentText, author: username})
+        });
+        if (!response.ok) {
+          const err = await response.text();
+          throw new Error(err);
+        }
+        setCommentText("");      // limpia el input
+      }
+    }catch (error){
+      setCommentText(error.message)
+    }
+  };
 
   useEffect(() => {
     if (!id) return; // evita llamada si no hay id
@@ -48,7 +73,14 @@ function Video() {
 
           <div style={styles.commentTitle}>Comments</div>
           <div style={styles.commentWrapper}>
-            <input type="text" placeholder="Add a comment..." style={styles.commentInput} />
+            <input
+                type="text"
+                placeholder="Add a comment..."
+                style={styles.commentInput}
+                value={commentText}
+                onChange={(e) => setCommentText(e.target.value)}
+                onKeyDown={comment}
+            />
             {video.meta?.comments?.length ? (
               video.meta.comments.map((c: any, i: number) => (
                 <div key={i} style={styles.commentWrapper}>

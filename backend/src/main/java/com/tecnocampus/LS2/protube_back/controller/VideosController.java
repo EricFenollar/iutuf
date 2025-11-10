@@ -1,5 +1,6 @@
 package com.tecnocampus.LS2.protube_back.controller;
 
+import com.tecnocampus.LS2.protube_back.persistence.Comment;
 import com.tecnocampus.LS2.protube_back.persistence.Video;
 import com.tecnocampus.LS2.protube_back.services.VideoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -90,6 +91,14 @@ public class VideosController {
         } catch (Exception e) {
             return ResponseEntity.internalServerError().build();
         }
+    }
+
+    @PostMapping("/{id}/comments")
+    public ResponseEntity<?> addComment(@PathVariable Long id, @RequestBody Comment comment) {
+        Video video = videoService.getVideoById(id);
+        video.addComment(comment);
+        videoService.saveVideo(video);
+        return ResponseEntity.ok().body("Comment successful");
     }
 
 

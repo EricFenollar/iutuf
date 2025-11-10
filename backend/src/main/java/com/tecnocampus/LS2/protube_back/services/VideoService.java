@@ -52,8 +52,12 @@ public class VideoService {
             }
         }
         return v.getPath().replace(".mp4", ".webp");
-        }
-
     }
+
+    public void saveVideo(Video video){
+        videoRepository.save(video);
+    }
+
+}
 
 

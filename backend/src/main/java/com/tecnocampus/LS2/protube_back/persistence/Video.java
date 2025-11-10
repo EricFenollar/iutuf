@@ -36,5 +36,9 @@ public class Video {
     // Ruta completa del archivo, por ejemplo C:/Users/顺东/Desktop/0.mp4
     private String path;
 
+    public void addComment(Comment comment){
+        meta.addComment(comment);
+    }
+
 }
 
