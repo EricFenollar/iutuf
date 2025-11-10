@@ -39,12 +39,12 @@ function Video() {
           </video>
         </div>
 
-        {/* COMENTARIOS */}
+        {/* TÍTULO, DESCRIPCIÓN Y COMENTARIOS */}
         <div style={styles.commentSection}>
-          {/* TÍTULO DEL VÍDEO */}
           <div style={styles.videoInfo}>
             <h3 style={styles.videoTitle}>{video.title}</h3>
           </div>
+          <div style={styles.videoDescription}>{video.meta.description || 'No description available.'}</div>
 
           <div style={styles.commentTitle}>Comments</div>
           <div style={styles.commentWrapper}>
@@ -124,9 +124,19 @@ const styles: Record<string, React.CSSProperties> = {
     marginTop: '1%',
     color: '#000',
   },
+  videoDescription: {
+    width: '90%',
+    marginLeft: '2.7%',
+    marginBottom: '1%',
+    padding: '1%',
+    backgroundColor: '#f0f0f0',
+    color: '#000',
+    borderRadius: '0.5%',
+    textAlign: 'left',
+    fontSize: '0.95vw',
+  },
   commentTitle: {
     marginLeft: '2.7%',
-    marginTop: '0.75%',
     fontSize: '1.2vw',
     fontWeight: 'bold',
     color: '#000',
