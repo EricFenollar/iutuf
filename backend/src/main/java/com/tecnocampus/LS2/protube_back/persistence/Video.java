@@ -1,12 +1,12 @@
 package com.tecnocampus.LS2.protube_back.persistence;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
-import jakarta.persistence.Id;
+
+import java.util.HashMap;
+import java.util.Map;
 
 
 @Data
@@ -36,9 +36,19 @@ public class Video {
     // Ruta completa del archivo, por ejemplo C:/Users/顺东/Desktop/0.mp4
     private String path;
 
+    private  int likeCount = 0;
+
+    private int dislikeCount = 0;
+    @ElementCollection
+    private Map<String,String> reaction= new HashMap<>();
+
+
     public void addComment(Comment comment){
         meta.addComment(comment);
     }
+    public String getReaction(String A) {
+        return reaction.get(A);
 
+    }
 }
 

@@ -1,37 +1,39 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import { getEnv } from '../utils/Env';
 import { useEffect, useState } from 'react';
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from '../context/AuthContext';
 
 type LoadingState = 'loading' | 'success' | 'error' | 'idle';
 function Video() {
+  //从path中找到路径参数id
   const { id } = useParams();
+  //专挑路径或者返回某个页面
   const navigate = useNavigate();
   // @ts-ignore
   const { username } = useAuth();
 
   const [video, setVideo] = useState<any | null>(null);
 
-  const [commentText, setCommentText] = useState("");
+  const [commentText, setCommentText] = useState('');
 
   const comment = async (e) => {
-    try{
-      if (e.key === "Enter" && commentText.trim() !== "") {
-        comment(commentText);    // llama a tu función comment
+    try {
+      if (e.key === 'Enter' && commentText.trim() !== '') {
+        comment(commentText); // llama a tu función comment
 
         const response = await fetch(`${getEnv().API_BASE_URL}/api/videos/${id}/comments`, {
-          method: "POST",
-          headers: {"Content-Type": "application/json"},
-          body: JSON.stringify({text: commentText, author: username})
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ text: commentText, author: username }),
         });
         if (!response.ok) {
           const err = await response.text();
           throw new Error(err);
         }
-        setCommentText("");      // limpia el input
+        setCommentText(''); // limpia el input
       }
-    }catch (error){
-      setCommentText(error.message)
+    } catch (error) {
+      setCommentText(error.message);
     }
   };
 
@@ -43,9 +45,66 @@ function Video() {
         if (!res.ok) throw new Error('Error al obtener el video');
         return res.json();
       })
-      .then((data) => setVideo(data))
+      .then((data) => {
+        setVideo(data);
+
+        //新增：从后端载入点赞、点踩、reaction
+        setLikes(data.likeCount ?? 0);
+        setDislikes(data.dislikeCount ?? 0);
+        setReaction(data.reaction ?? null);
+      })
       .catch((err) => console.error(err));
   }, [id]);
+  //添加点赞功能
+  const [likes, setLikes] = useState(0);
+  const [dislikes, setDislikes] = useState(0);
+  const [userReaction, setReaction] = useState<'like' | 'dislike' | null>(null);
+  async function handleLike() {
+    try {
+      const response = await fetch(`${getEnv().API_BASE_URL}/api/videos/${id}/like?username=${username}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      if (!response) return console.error('POST/like La solicitud falló.');
+
+      const data = await response.json();
+      setLikes(data.likeCount);
+      setDislikes(data.dislikeCount);
+      setReaction(data.reaction);
+
+    } catch (error) {
+      // 网络错误（服务器关闭、断网等）
+      console.error('Like failed (network error):', error);
+    }
+  }
+
+  async function handdislike() {
+    try {
+      const response = await fetch(`${getEnv().API_BASE_URL}/api/videos/${id}/dislike?username=${username}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (!response.ok) {
+        console.error('POST /dislike failed:', response.status);
+        return;
+      }
+
+      const data = await response.json();
+
+      setLikes(data.likeCount);
+      setDislikes(data.dislikeCount);
+      setReaction(data.reaction);
+
+    } catch (error) {
+      // 网络错误（断网/后端停机）
+      console.error('Dislike failed (network error):', error);
+    }
+  }
 
   if (!video) return <p>Cargando...</p>;
 
@@ -69,17 +128,26 @@ function Video() {
           <div style={styles.videoInfo}>
             <h3 style={styles.videoTitle}>{video.title}</h3>
           </div>
+          <div>
+            <button onClick={handleLike} style={{ color: userReaction === 'like' ? 'blue' : 'gray' }}>
+              👍{likes}
+            </button>
+
+            <button onClick={handdislike} style={{ color: userReaction === 'dislike' ? 'red' : 'gray' }}>
+              👎 {dislikes}
+            </button>
+          </div>
           <div style={styles.videoDescription}>{video.meta.description || 'No description available.'}</div>
 
           <div style={styles.commentTitle}>Comments</div>
           <div style={styles.commentWrapper}>
             <input
-                type="text"
-                placeholder="Add a comment..."
-                style={styles.commentInput}
-                value={commentText}
-                onChange={(e) => setCommentText(e.target.value)}
-                onKeyDown={comment}
+              type="text"
+              placeholder="Add a comment..."
+              style={styles.commentInput}
+              value={commentText}
+              onChange={(e) => setCommentText(e.target.value)}
+              onKeyDown={comment}
             />
             {video.meta?.comments?.length ? (
               video.meta.comments.map((c: any, i: number) => (

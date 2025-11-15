@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.core.io.Resource;
 
@@ -99,6 +100,17 @@ public class VideosController {
         video.addComment(comment);
         videoService.saveVideo(video);
         return ResponseEntity.ok().body("Comment successful");
+    }
+
+
+    @PostMapping("/{id}/like")
+    public Video likeVideo(@PathVariable Long id, @RequestParam String username) {
+        return videoService.reactLike(id, username);
+    }
+
+    @PostMapping("/{id}/dislike")
+    public Video dislikeVideo(@PathVariable Long id, @RequestParam String username) {
+        return videoService.reactDislike(id, username);
     }
 
 
