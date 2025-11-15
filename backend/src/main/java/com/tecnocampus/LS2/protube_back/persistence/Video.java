@@ -14,6 +14,8 @@ import java.util.Map;
 @Table(name = "videos")
 public class Video {
     @Id
+    //aqui,a los video subido por los usuarios se les asignan identificadores automáticamente
+    //@GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String title;

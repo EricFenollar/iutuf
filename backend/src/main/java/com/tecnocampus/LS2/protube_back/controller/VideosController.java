@@ -2,6 +2,7 @@ package com.tecnocampus.LS2.protube_back.controller;
 
 import com.tecnocampus.LS2.protube_back.persistence.Comment;
 import com.tecnocampus.LS2.protube_back.persistence.Video;
+import com.tecnocampus.LS2.protube_back.persistence.VideoMeta;
 import com.tecnocampus.LS2.protube_back.services.VideoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.UrlResource;
@@ -10,10 +11,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.core.io.Resource;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.UUID;
 
 @CrossOrigin(origins = "http://localhost:5173")
 @RestController
@@ -111,6 +115,41 @@ public class VideosController {
     @PostMapping("/{id}/dislike")
     public Video dislikeVideo(@PathVariable Long id, @RequestParam String username) {
         return videoService.reactDislike(id, username);
+    }
+    public ResponseEntity<?> VideoUpload (
+            @RequestParam MultipartFile file, @RequestParam String username,
+            @RequestParam String title, @RequestParam String description){
+        try{
+            if(file == null||file.isEmpty()){
+                throw new RuntimeException("El EXCEPTION IS NULL");
+            }
+            // 2. 生成文件名和保存路径
+            String fileName = UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
+            Path savePath = Paths.get("videos").resolve(fileName);
+            //如果Videos文件夹不存在直接建造一个新的
+            Files.createDirectories(savePath.getParent());
+            //保存文件到磁盘
+            file.transferTo(savePath.toFile());
+            //创建实体
+            Video V = new Video();
+
+
+            // ⚠️ 如果你没有 @GeneratedValue，必须手动设置 id
+            V.setId(System.currentTimeMillis());
+
+            V.setTitle(title);
+            V.setUser(username);
+            V.setPath(savePath.toString());
+
+            VideoMeta meta = new VideoMeta();
+            meta.setDescription(description);
+            V.setMeta(meta);
+
+            Video saved = videoService.saveVideo(V);
+            return ResponseEntity.ok().body(saved);
+        }catch(Exception e){
+            throw new RuntimeException("Error al subir video: " + e.getMessage());
+        }
     }
 
 

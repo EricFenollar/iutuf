@@ -3,11 +3,9 @@ package com.tecnocampus.LS2.protube_back.services;
 import com.tecnocampus.LS2.protube_back.persistence.Video;
 import com.tecnocampus.LS2.protube_back.repository.videoReposity;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Objects;
 
 @Service
 public class VideoService {
@@ -56,8 +54,9 @@ public class VideoService {
         return v.getPath().replace(".mp4", ".webp");
     }
 
-    public void saveVideo(Video video){
+    public Video saveVideo(Video video){
         videoRepository.save(video);
+        return video;
     }
 
     public int findByIdDislikes(Long id) {
