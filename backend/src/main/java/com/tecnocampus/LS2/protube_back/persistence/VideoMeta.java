@@ -12,6 +12,7 @@ public class VideoMeta {
     private List<String> tags;
     private List<Comment> comments;
 
+
     public void addComment(Comment comment){
         comments.add(comment);
     }

@@ -116,41 +116,51 @@ public class VideosController {
     public Video dislikeVideo(@PathVariable Long id, @RequestParam String username) {
         return videoService.reactDislike(id, username);
     }
-    public ResponseEntity<?> VideoUpload (
-            @RequestParam MultipartFile file, @RequestParam String username,
-            @RequestParam String title, @RequestParam String description){
-        try{
-            if(file == null||file.isEmpty()){
-                throw new RuntimeException("El EXCEPTION IS NULL");
+    @PostMapping("/upload")
+    public ResponseEntity<?> videoUpload(
+            @RequestParam("file") MultipartFile file,
+            @RequestParam("username") String username,
+            @RequestParam("title") String title,
+            @RequestParam("description") String description
+    ) {
+        try {
+            if (file == null || file.isEmpty()) {
+                throw new RuntimeException("File is null or empty");
             }
-            // 2. 生成文件名和保存路径
-            String fileName = UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
-            Path savePath = Paths.get("videos").resolve(fileName);
-            //如果Videos文件夹不存在直接建造一个新的
-            Files.createDirectories(savePath.getParent());
-            //保存文件到磁盘
+
+            // 1. 固定保存目录 C:/videos
+            Path root = Paths.get("C:/videos");
+
+            // 如果目录不存在则创建
+            Files.createDirectories(root);
+
+            // 2. 生成文件名
+            String fileName = UUID.randomUUID() + "_" + file.getOriginalFilename();
+            Path savePath = root.resolve(fileName);
+
+            // 3. 保存文件
             file.transferTo(savePath.toFile());
-            //创建实体
-            Video V = new Video();
 
-
-            // ⚠️ 如果你没有 @GeneratedValue，必须手动设置 id
-            V.setId(System.currentTimeMillis());
-
-            V.setTitle(title);
-            V.setUser(username);
-            V.setPath(savePath.toString());
+            // 4. 构建 Video 对象
+            Video v = new Video();
+            v.setId(System.currentTimeMillis());
+            v.setTitle(title);
+            v.setUser(username);
+            v.setPath(savePath.toString());
 
             VideoMeta meta = new VideoMeta();
             meta.setDescription(description);
-            V.setMeta(meta);
+            v.setMeta(meta);
 
-            Video saved = videoService.saveVideo(V);
-            return ResponseEntity.ok().body(saved);
-        }catch(Exception e){
+            Video saved = videoService.saveVideo(v);
+
+            return ResponseEntity.ok(saved);
+
+        } catch (Exception e) {
             throw new RuntimeException("Error al subir video: " + e.getMessage());
         }
     }
+
 
 
 }

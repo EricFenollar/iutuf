@@ -20,6 +20,8 @@ public class Video {
 
     private String title;
 
+
+
     @Column(name = "user_name")
     private String user;
     private int width;

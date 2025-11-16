@@ -58,21 +58,6 @@ public class VideoService {
         videoRepository.save(video);
         return video;
     }
-
-    public int findByIdDislikes(Long id) {
-        Video video= videoRepository.findById(id).orElse(null);
-        if(video== null)
-            return 0;
-        return video.getDislikeCount();
-
-    }
-
-    public int findByIdlikes(long id) {
-        Video video = videoRepository.findById(id).orElse(null);
-        if(video==null)
-            return 0;
-        return video.getLikeCount();
-    }
     public Video reactLike(Long videoId, String username) {
         Video video = videoRepository.findById(videoId).orElse(null);
         if (video == null)
