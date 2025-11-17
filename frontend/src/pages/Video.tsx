@@ -2,7 +2,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { getEnv } from '../utils/Env';
 import { useEffect, useState } from 'react';
 import { useAuth } from '../context/AuthContext';
-import './video.css'; // 保留新增的 CSS
+import './Video.css'; // 保留新增的 CSS
 
 type LoadingState = 'loading' | 'success' | 'error' | 'idle';
 
