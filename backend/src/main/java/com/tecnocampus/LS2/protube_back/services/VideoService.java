@@ -52,8 +52,65 @@ public class VideoService {
             }
         }
         return v.getPath().replace(".mp4", ".webp");
-        }
-
     }
+
+    public Video saveVideo(Video video){
+        videoRepository.save(video);
+        return video;
+    }
+    public Video reactLike(Long videoId, String username) {
+        Video video = videoRepository.findById(videoId).orElse(null);
+        if (video == null)
+            return null;
+
+        String evaluacion = video.getReaction(username);
+
+        if (evaluacion != null && evaluacion.equals("like")) {
+            // 如果之前已经点赞过，再次点击取消点赞
+            video.setLikeCount(video.getLikeCount() - 1);
+            video.getReaction().remove(username);
+        } else if (evaluacion != null && evaluacion.equals("dislike")) {
+            // 原来是点踩 -> 变成点赞
+            video.setDislikeCount(video.getDislikeCount() - 1);
+            video.setLikeCount(video.getLikeCount() + 1);
+            video.getReaction().put(username, "like");
+        } else {
+            // 没有反应 -> 点赞
+            video.setLikeCount(video.getLikeCount() + 1);
+            video.getReaction().put(username, "like");
+        }
+        videoRepository.save(video);
+        return video;
+    }
+    public Video reactDislike(Long videoId, String username) {
+        Video video = videoRepository.findById(videoId).orElse(null);
+        if (video == null)
+            return null;
+
+        String evaluacion = video.getReaction().get(username);
+
+        if (evaluacion != null && evaluacion.equals("dislike")) {
+            // 之前点踩 → 点击取消点踩
+            video.setDislikeCount(video.getDislikeCount() - 1);
+            video.getReaction().remove(username);
+
+        } else if (evaluacion != null && evaluacion.equals("like")) {
+            // 之前点赞 → 变成点踩
+            video.setLikeCount(video.getLikeCount() - 1);
+            video.setDislikeCount(video.getDislikeCount() + 1);
+            video.getReaction().put(username, "dislike");
+
+        } else {
+            // 之前没有反应 → 点踩
+            video.setDislikeCount(video.getDislikeCount() + 1);
+            video.getReaction().put(username, "dislike");
+        }
+        videoRepository.save(video);
+        return video;
+    }
+
+
+}
+
 
 

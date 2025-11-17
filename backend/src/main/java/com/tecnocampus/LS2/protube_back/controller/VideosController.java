@@ -1,17 +1,23 @@
 package com.tecnocampus.LS2.protube_back.controller;
 
+import com.tecnocampus.LS2.protube_back.persistence.Comment;
 import com.tecnocampus.LS2.protube_back.persistence.Video;
+import com.tecnocampus.LS2.protube_back.persistence.VideoMeta;
 import com.tecnocampus.LS2.protube_back.services.VideoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.core.io.Resource;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.UUID;
 
 @CrossOrigin(origins = "http://localhost:5173")
 @RestController
@@ -91,6 +97,70 @@ public class VideosController {
             return ResponseEntity.internalServerError().build();
         }
     }
+
+    @PostMapping("/{id}/comments")
+    public ResponseEntity<?> addComment(@PathVariable Long id, @RequestBody Comment comment) {
+        Video video = videoService.getVideoById(id);
+        video.addComment(comment);
+        videoService.saveVideo(video);
+        return ResponseEntity.ok().body("Comment successful");
+    }
+
+
+    @PostMapping("/{id}/like")
+    public Video likeVideo(@PathVariable Long id, @RequestParam String username) {
+        return videoService.reactLike(id, username);
+    }
+
+    @PostMapping("/{id}/dislike")
+    public Video dislikeVideo(@PathVariable Long id, @RequestParam String username) {
+        return videoService.reactDislike(id, username);
+    }
+    @PostMapping("/upload")
+    public ResponseEntity<?> videoUpload(
+            @RequestParam("file") MultipartFile file,
+            @RequestParam("username") String username,
+            @RequestParam("title") String title,
+            @RequestParam("description") String description
+    ) {
+        try {
+            if (file == null || file.isEmpty()) {
+                throw new RuntimeException("File is null or empty");
+            }
+
+            // 1. 固定保存目录 C:/videos
+            Path root = Paths.get("C:/videos");
+
+            // 如果目录不存在则创建
+            Files.createDirectories(root);
+
+            // 2. 生成文件名
+            String fileName = UUID.randomUUID() + "_" + file.getOriginalFilename();
+            Path savePath = root.resolve(fileName);
+
+            // 3. 保存文件
+            file.transferTo(savePath.toFile());
+
+            // 4. 构建 Video 对象
+            Video v = new Video();
+            v.setId(System.currentTimeMillis());
+            v.setTitle(title);
+            v.setUser(username);
+            v.setPath(savePath.toString());
+
+            VideoMeta meta = new VideoMeta();
+            meta.setDescription(description);
+            v.setMeta(meta);
+
+            Video saved = videoService.saveVideo(v);
+
+            return ResponseEntity.ok(saved);
+
+        } catch (Exception e) {
+            throw new RuntimeException("Error al subir video: " + e.getMessage());
+        }
+    }
+
 
 
 }
