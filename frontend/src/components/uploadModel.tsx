@@ -17,7 +17,6 @@ const UploadModal: React.FC<UploadModalProps> = ({ onClose, onSuccess }) => {
   const [error, setError] = useState('');
   const [thumbnail, setThumbnail] = useState<File | null>(null);
 
-  // @ts-ignore
   const { username } = useAuth();
 
   async function handleUpload() {
