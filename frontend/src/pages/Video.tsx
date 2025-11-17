@@ -9,14 +9,14 @@ type LoadingState = 'loading' | 'success' | 'error' | 'idle';
 function Video() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { username } = useAuth();
+  const { username, isAuthenticated } = useAuth();
   const [showFullDescription, setShowFullDescription] = useState(false);
   const [video, setVideo] = useState<any | null>(null);
   const [commentText, setCommentText] = useState('');
 
   const comment = async (e) => {
     try {
-      if (e.key === 'Enter' && commentText.trim() !== '') {
+      if (e.key === "Enter" && commentText.trim() !== "" && isAuthenticated) {
         comment(commentText);
 
         const response = await fetch(`${getEnv().API_BASE_URL}/api/videos/${id}/comments`, {
