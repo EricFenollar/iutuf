@@ -6,7 +6,6 @@ import { getEnv } from '../utils/Env';
 
 const REGISTER_URL = `${getEnv().API_BASE_URL}/api/auth/register`;
 function Register() {
-  // @ts-ignore
   const { login } = useAuth();
   const [email, setEmail] = useState('');
   const [username, setUsername] = useState('');

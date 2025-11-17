@@ -11,8 +11,6 @@ function Home() {
   const [displayVideos, setDisplayVideos] = useState<any[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [showUpload, setShowUpload] = useState(false); // ← 新增
-
-  // @ts-ignore
   const { isAuthenticated, logout } = useAuth();
 
   // 初始化时加载视频

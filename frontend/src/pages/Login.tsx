@@ -6,7 +6,6 @@ import { getEnv } from '../utils/Env';
 
 const LOGIN_URL = `${getEnv().API_BASE_URL}/api/auth/login`;
 function Login() {
-  // @ts-ignore
   const { login } = useAuth();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
