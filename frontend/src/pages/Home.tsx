@@ -3,20 +3,25 @@ import { useAllVideos } from '../useAllVideos';
 import VideoGrid from '../components/VideoGrid';
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
+import UploadModal from '../components/uploadModel';
 
 function Home() {
   const { loading, message, value: allVideos } = useAllVideos();
   const [displayVideos, setDisplayVideos] = useState<any[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
+  const [showUpload, setShowUpload] = useState(false); // ← 新增
+  const { isAuthenticated, logout } = useAuth();
 
+  // 初始化时加载视频
   useEffect(() => {
     if (loading === 'success' && allVideos) {
       setDisplayVideos(allVideos);
     }
   }, [loading, allVideos]);
 
+  // 搜索功能
   useEffect(() => {
-    //actualiza la grid mientras se escribe
     if (!allVideos) return;
 
     if (searchTerm.trim() === '') {
@@ -26,6 +31,15 @@ function Home() {
       setDisplayVideos(filtered);
     }
   }, [searchTerm, allVideos]);
+
+  // 上传成功后的回调
+  function handleUploadSuccess(video: any) {
+    // 添加到顶部（体验更好）
+    setDisplayVideos((prev) => [video, ...prev]);
+
+    // 关闭上传 Modal
+    setShowUpload(false);
+  }
 
   if (loading === 'loading') return <div>Loading...</div>;
   if (loading === 'error')
@@ -52,40 +66,29 @@ function Home() {
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
-          {/*Enlace a Login */}
-          <a href="/login" className="login-link">
-            Login
-          </a>
+
+          <button className="upload-btn" onClick={() => setShowUpload(true)}>
+            Upload
+          </button>
+
+          <Link
+            to={isAuthenticated ? '/' : '/login'}
+            className="login-link"
+            onClick={isAuthenticated ? logout : undefined}
+          >
+            {isAuthenticated ? 'Logout' : 'Login'}
+          </Link>
         </div>
       </header>
 
       <main className="App-content">
         <VideoGrid videos={displayVideos} />
       </main>
+
+      {/* 上传弹窗 */}
+      {showUpload && <UploadModal onClose={() => setShowUpload(false)} onSuccess={handleUploadSuccess} />}
     </div>
   );
-}
-
-function ContentApp() {
-  const { loading, message, value } = useAllVideos();
-  switch (loading) {
-    case 'loading':
-      return <div>Loading...</div>;
-    case 'error':
-      return (
-        <div>
-          <h3>Error</h3> <p>{message}</p>
-        </div>
-      );
-    case 'success':
-      return (
-        <>
-          <h2>Videos available:</h2>
-          <VideoGrid videos={value} />
-        </>
-      );
-  }
-  return <div>Idle...</div>;
 }
 
 export default Home;

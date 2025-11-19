@@ -25,16 +25,16 @@ public class AuthController {
         return ResponseEntity.ok().body("User registered successfully");
     }
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody User loginUser) {
+    public ResponseEntity<?> login(@RequestBody LoginRequest request) {
         // 1️⃣ Find user by username
-        User existingUser = userService.findByUsername(loginUser.getUsername());
+        User existingUser = userService.findByUsername(request.getUsername());
         if (existingUser == null) {
             return ResponseEntity.status(404).body("User not found");
         }
 
         // 2️⃣ Compare password (plain text vs encrypted one)
         boolean match = userService.checkPassword(
-                loginUser.getPassword(),
+                request.getPassword(),
                 existingUser.getPassword()
         );
 
