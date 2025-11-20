@@ -57,6 +57,9 @@ h2 {
   margin-top: 2vh;
 }
 
+/* ------------------------------ */
+/* 🔵 Login Link (Home 右上角)    */
+/* ------------------------------ */
 .login-link {
   margin-left: clamp(8px, 2vw, 20px);
   font-size: clamp(12px, 1.2vw, 18px);
@@ -65,16 +68,39 @@ h2 {
   text-decoration: none;
   font-weight: 600;
   transition: color 0.2s ease;
-  padding: 0.3em 0;
+  padding: 8px 12px;
 }
 
 .login-link:hover {
   color: #1e90ff;
 }
 
+/* ------------------------------ */
+/* 🔵 Upload Button               */
+/* ------------------------------ */
 .upload-btn {
-
+  background-color: #0077b6;
+  color: white;
+  padding: 8px 20px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-left: 15px;
+  font-size: clamp(12px, 1.2vw, 18px);
+  font-weight: 600;
+  transition: background 0.2s ease, transform 0.1s ease;
 }
+
+.upload-btn:hover {
+  background-color: #0096c7;
+}
+
+.upload-btn:active {
+  background-color: #005f87;
+  transform: scale(0.95);
+}
+
+
 
 @keyframes App-logo-spin {
   from {

@@ -10,10 +10,10 @@ function Home() {
   const { loading, message, value: allVideos } = useAllVideos();
   const [displayVideos, setDisplayVideos] = useState<any[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
-  const [showUpload, setShowUpload] = useState(false); // ← 新增
+  const [showUpload, setShowUpload] = useState(false);
   const { isAuthenticated, logout } = useAuth();
 
-  // 初始化时加载视频
+  // 初始化加载
   useEffect(() => {
     if (loading === 'success' && allVideos) {
       setDisplayVideos(allVideos);
@@ -32,12 +32,9 @@ function Home() {
     }
   }, [searchTerm, allVideos]);
 
-  // 上传成功后的回调
+  // 上传成功回调
   function handleUploadSuccess(video: any) {
-    // 添加到顶部（体验更好）
     setDisplayVideos((prev) => [video, ...prev]);
-
-    // 关闭上传 Modal
     setShowUpload(false);
   }
 
@@ -67,7 +64,17 @@ function Home() {
             onChange={(e) => setSearchTerm(e.target.value)}
           />
 
-          <button className="upload-btn" onClick={() => setShowUpload(true)}>
+          {/* 🔥 关键修改点：未登录时点击会提示 */}
+          <button
+            className="upload-btn"
+            onClick={() => {
+              if (!isAuthenticated) {
+                alert('You must log in before uploading a video.');
+                return;
+              }
+              setShowUpload(true);
+            }}
+          >
             Upload
           </button>
 
@@ -86,7 +93,12 @@ function Home() {
       </main>
 
       {/* 上传弹窗 */}
-      {showUpload && <UploadModal onClose={() => setShowUpload(false)} onSuccess={handleUploadSuccess} />}
+      {showUpload && (
+        <UploadModal
+          onClose={() => setShowUpload(false)}
+          onSuccess={handleUploadSuccess}
+        />
+      )}
     </div>
   );
 }

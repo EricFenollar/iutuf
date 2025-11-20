@@ -15,11 +15,16 @@ const UploadModal: React.FC<UploadModalProps> = ({ onClose, onSuccess }) => {
   const [uploading, setUploading] = useState(false);
   const [progress, setProgress] = useState(0);
   const [error, setError] = useState('');
-  const [thumbnail, setThumbnail] = useState<File | null>(null);
 
   const { username } = useAuth();
 
   async function handleUpload() {
+    // ❗ 未登录时提示，不禁用按钮，只显示错误
+    if (!username) {
+      setError('You must log in before uploading.');
+      return;
+    }
+
     if (!file) return setError('Please select a video file.');
     if (!title.trim()) return setError('Please enter a title.');
     if (!file.type.startsWith('video/')) return setError('File is not a video.');
@@ -46,8 +51,8 @@ const UploadModal: React.FC<UploadModalProps> = ({ onClose, onSuccess }) => {
 
       const video = response.data;
 
-      onSuccess(video); // 通知父组件刷新
-      onClose(); // 关闭 Modal
+      onSuccess(video);
+      onClose();
     } catch (err: any) {
       setError(err.message || 'Upload failed');
     } finally {
@@ -75,11 +80,18 @@ const UploadModal: React.FC<UploadModalProps> = ({ onClose, onSuccess }) => {
 
         <input type="text" placeholder="Title" value={title} onChange={(e) => setTitle(e.target.value)} />
 
-        <input type="file" accept="image/*" onChange={(e) => setThumbnail(e.target.files?.[0] || null)} />
-
         <textarea placeholder="Description" value={description} onChange={(e) => setDescription(e.target.value)} />
 
-        <button style={styles.button} onClick={handleUpload} disabled={uploading}>
+        {/* Upload 按钮：未登录可点，但会弹出提示 */}
+        <button
+          style={{
+            ...styles.button,
+            background: uploading ? '#999' : '#0077b6',
+            cursor: uploading ? 'not-allowed' : 'pointer',
+          }}
+          onClick={handleUpload}
+          disabled={uploading}
+        >
           {uploading ? 'Uploading...' : 'Upload'}
         </button>
 
@@ -93,9 +105,7 @@ const UploadModal: React.FC<UploadModalProps> = ({ onClose, onSuccess }) => {
 
 export default UploadModal;
 
-//
-// 🎨 UI 样式（完全修复）
-//
+// 🎨 样式保持不变
 const styles: Record<string, React.CSSProperties> = {
   backdrop: {
     position: 'fixed',
@@ -134,12 +144,10 @@ const styles: Record<string, React.CSSProperties> = {
   },
   button: {
     padding: '10px',
-    background: '#0077b6',
     color: 'white',
     fontSize: '16px',
     borderRadius: '8px',
     border: 'none',
-    cursor: 'pointer',
   },
   cancelButton: {
     padding: '10px',
