@@ -11,7 +11,7 @@ function Home() {
   const [displayVideos, setDisplayVideos] = useState<any[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [showUpload, setShowUpload] = useState(false); // ← 新增
-  const { isAuthenticated, logout } = useAuth();
+  const { user, isAuthenticated, logout } = useAuth();
 
   // 初始化时加载视频
   useEffect(() => {
@@ -70,6 +70,13 @@ function Home() {
           <button className="upload-btn" onClick={() => setShowUpload(true)}>
             Upload
           </button>
+
+          {/* My Profile */}
+          {isAuthenticated && (
+            <Link to={user ? `/profile/${user.id}` : '/profile'} className="login-link">
+              My Profile
+            </Link>
+          )}
 
           <Link
             to={isAuthenticated ? '/' : '/login'}
