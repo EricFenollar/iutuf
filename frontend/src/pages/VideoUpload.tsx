@@ -20,7 +20,7 @@ function VideoUpload() {
   const { username, token, isAuthenticated } = useAuth();
 
   useEffect(() => {
-    if (!token || isAuthenticated === false) {
+    if (isAuthenticated == false) {
       navigate('/login');
     }
   }, [token, isAuthenticated, navigate]);
@@ -28,7 +28,7 @@ function VideoUpload() {
   const handleUpload = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!token) {
+    if (!isAuthenticated) {
       setError('You must be logged in to upload videos.');
       return;
     }
