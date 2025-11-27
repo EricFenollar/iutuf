@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { getEnv } from '../utils/Env';
@@ -17,10 +17,22 @@ function VideoUpload() {
   const [error, setError] = useState('');
 
   const navigate = useNavigate();
-  const { username, token } = useAuth();
+  const { username, token, isAuthenticated } = useAuth();
+
+  useEffect(() => {
+    if (!token || isAuthenticated === false) {
+      navigate('/login');
+    }
+  }, [token, isAuthenticated, navigate]);
 
   const handleUpload = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!token) {
+      setError('You must be logged in to upload videos.');
+      return;
+    }
+
     if (!file) return setError('Please select a video file.');
     if (!title.trim()) return setError('Please enter a title.');
 
