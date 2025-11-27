@@ -101,6 +101,13 @@
     width: 90%;
     margin-left: 1.4%;
 }
+.no-comments-text {
+    padding: 1.5%;
+    text-align: left;
+    color: #000;
+    font-weight: bold;
+    width: 100%;
+}
 .comment-input {
     width: 75%;
     padding: 1%;
@@ -129,4 +136,51 @@
 }
 .tags-container {
     margin-top: 0.5em;
+}
+
+.action-buttons {
+    width: 90%;
+    margin-left: 2.7%;
+    margin-bottom: 1%;
+    display: flex;
+    gap: 1rem;
+}
+
+.like-dislike-btn {
+    padding: 0.6rem 1.2rem;
+    background-color: #f2f2f2;
+    border: none;
+    border-radius: 2rem;
+    font-size: 1vw;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: background-color 0.2s;
+}
+
+.like-dislike-btn:hover {
+    background-color: #e5e5e5;
+}
+
+.video-category {
+    font-size: 0.9vw;
+    color: #000000;
+    margin-bottom: 0.8rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #e0e0e0;
+    font-weight: 500;
+}
+
+/* Ajustes responsive para los botones */
+@media (max-width: 768px) {
+    .like-dislike-btn {
+        font-size: 3.5vw;
+        padding: 0.5rem 1rem;
+    }
+
+    .video-category {
+        font-size: 3vw;
+    }
 }
