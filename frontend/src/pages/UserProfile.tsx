@@ -4,40 +4,42 @@ import { useAuth } from '../context/AuthContext';
 import { getEnv } from '../utils/Env';
 import VideoGrid from '../components/VideoGrid';
 import { Link, useParams } from 'react-router-dom';
+import {useUserVideos} from "../useUserVideos";
 
 function UserProfile() {
   const { user, isAuthenticated, logout } = useAuth();
-  const { id } = useParams();
-  const userId = id || user?.id;
-
-  const [videos, setVideos] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
+  const { username } = useParams();
+  const userId = username || user?.id;
+  const { value: videos, loading, message } = useUserVideos(userId);
+  const [displayVideos, setDisplayVideos] = useState<any[]>([]);
+  const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
-    if (!isAuthenticated || !userId) return;
+    if (loading === 'success' && videos) {
+      setDisplayVideos(videos);
+    }
+  }, [loading, videos]);
 
-    fetch(`${getEnv().API_BASE_URL}/api/videos/user/${userId}`)
-      .then((res) => res.json())
-      .then((data) => {
-        setVideos(data);
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.error(err);
-        setLoading(false);
-      });
-  }, [isAuthenticated, userId]);
+  // 搜索功能
+  useEffect(() => {
+    if (!videos) return;
 
-  if (!isAuthenticated) {
+    if (searchTerm.trim() === '') {
+      setDisplayVideos(videos);
+    } else {
+      const filtered = videos.filter((video: any) => video.title.toLowerCase().includes(searchTerm.toLowerCase()));
+      setDisplayVideos(filtered);
+    }
+  }, [searchTerm, videos]);
+
+  if (loading === 'loading') return <div>Loading...</div>;
+  if (loading === 'error')
     return (
-      <div className="not-logged">
-        <h2>You must be logged in to view your profile.</h2>
-        <Link to="/login" className="login-button">
-          Go to Login
-        </Link>
-      </div>
+        <div>
+          <h3>Error</h3>
+          <p>{message}</p>
+        </div>
     );
-  }
 
   return (
     <div className="App">
@@ -63,13 +65,20 @@ function UserProfile() {
 
       {/* CONTENIDO */}
       <main className="profile-content">
-        <h2>Your Videos</h2>
+        <h2>
+          {username === user ? "Your Videos" : `${username}'s Videos`}
+        </h2>
+
         {loading ? (
-          <p>Loading...</p>
+            <p>Loading...</p>
         ) : videos.length === 0 ? (
-          <p>You haven't uploaded any videos yet.</p>
+            <p>
+              {username === user
+                  ? "You haven't uploaded any videos yet."
+                  : `${username} hasn't uploaded any videos yet.`}
+            </p>
         ) : (
-          <VideoGrid videos={videos} />
+            <VideoGrid videos={videos} />
         )}
       </main>
     </div>
