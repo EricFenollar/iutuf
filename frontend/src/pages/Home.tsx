@@ -5,25 +5,25 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import UploadModal from '../components/uploadModel';
+import { useTranslation } from 'react-i18next';
+import LanguageSwitcher from '../components/LanguageSwitcher';
 
 function Home() {
   const { loading, message, value: allVideos } = useAllVideos();
   const [displayVideos, setDisplayVideos] = useState<any[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
-  const [showUpload, setShowUpload] = useState(false); // ← 新增
+  const [showUpload, setShowUpload] = useState(false);
   const { isAuthenticated, logout } = useAuth();
+  const { t } = useTranslation();
 
-  // 初始化时加载视频
   useEffect(() => {
     if (loading === 'success' && allVideos) {
       setDisplayVideos(allVideos);
     }
   }, [loading, allVideos]);
 
-  // 搜索功能
   useEffect(() => {
     if (!allVideos) return;
-
     if (searchTerm.trim() === '') {
       setDisplayVideos(allVideos);
     } else {
@@ -32,20 +32,16 @@ function Home() {
     }
   }, [searchTerm, allVideos]);
 
-  // 上传成功后的回调
   function handleUploadSuccess(video: any) {
-    // 添加到顶部（体验更好）
     setDisplayVideos((prev) => [video, ...prev]);
-
-    // 关闭上传 Modal
     setShowUpload(false);
   }
 
-  if (loading === 'loading') return <div>Loading...</div>;
+  if (loading === 'loading') return <div>{t('common.loading')}</div>;
   if (loading === 'error')
     return (
       <div>
-        <h3>Error</h3>
+        <h3>{t('common.error')}</h3>
         <p>{message}</p>
       </div>
     );
@@ -59,16 +55,28 @@ function Home() {
         </div>
 
         <div className="header-right">
+          {/* 🌍 放在上传按钮左边的语言切换器 */}
+          <LanguageSwitcher />
+
           <input
             type="text"
-            placeholder="Search videos..."
+            placeholder={t('header.search_placeholder')}
             className="search-bar"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
 
-          <button className="upload-btn" onClick={() => setShowUpload(true)}>
-            Upload
+          <button
+            className="upload-btn"
+            onClick={() => {
+              if (!isAuthenticated) {
+                alert(t('upload.need_login'));
+                return;
+              }
+              setShowUpload(true);
+            }}
+          >
+            {t('header.upload')}
           </button>
 
           <Link
@@ -76,7 +84,7 @@ function Home() {
             className="login-link"
             onClick={isAuthenticated ? logout : undefined}
           >
-            {isAuthenticated ? 'Logout' : 'Login'}
+            {isAuthenticated ? t('header.logout') : t('header.login')}
           </Link>
         </div>
       </header>
@@ -85,7 +93,6 @@ function Home() {
         <VideoGrid videos={displayVideos} />
       </main>
 
-      {/* 上传弹窗 */}
       {showUpload && <UploadModal onClose={() => setShowUpload(false)} onSuccess={handleUploadSuccess} />}
     </div>
   );
