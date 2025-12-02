@@ -10,7 +10,9 @@ import LanguageSwitcher from '../components/LanguageSwitcher';
 
 function Home() {
   const { loading, message, value: allVideos } = useAllVideos();
+
   const [displayVideos, setDisplayVideos] = useState<any[]>([]);
+
   const [searchTerm, setSearchTerm] = useState('');
   const [showUpload, setShowUpload] = useState(false);
   const { isAuthenticated, logout } = useAuth();
@@ -28,6 +30,7 @@ function Home() {
       setDisplayVideos(allVideos);
     } else {
       const filtered = allVideos.filter((video: any) => video.title.toLowerCase().includes(searchTerm.toLowerCase()));
+
       setDisplayVideos(filtered);
     }
   }, [searchTerm, allVideos]);
@@ -51,6 +54,7 @@ function Home() {
       <header className="App-header">
         <div className="header-left">
           <img src="/protube-logo-removebg-preview.png" className="App-logo" alt="logo" />
+
           <h1 className="app-name">ProTube</h1>
         </div>
 
@@ -66,18 +70,9 @@ function Home() {
             onChange={(e) => setSearchTerm(e.target.value)}
           />
 
-          <button
-            className="upload-btn"
-            onClick={() => {
-              if (!isAuthenticated) {
-                alert(t('upload.need_login'));
-                return;
-              }
-              setShowUpload(true);
-            }}
-          >
-            {t('header.upload')}
-          </button>
+          <Link to="/upload" className="upload-link">
+            Upload
+          </Link>
 
           <Link
             to={isAuthenticated ? '/' : '/login'}
@@ -92,8 +87,6 @@ function Home() {
       <main className="App-content">
         <VideoGrid videos={displayVideos} />
       </main>
-
-      {showUpload && <UploadModal onClose={() => setShowUpload(false)} onSuccess={handleUploadSuccess} />}
     </div>
   );
 }

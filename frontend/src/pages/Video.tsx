@@ -114,13 +114,21 @@ function Video() {
           </div>
 
           {/* Like / Dislike */}
-          <div>
-            <button onClick={handleLike} style={{ color: userReaction === 'like' ? 'blue' : 'gray' }}>
-              👍 {likes} {t('video.like')}
+          <div className="action-buttons">
+            <button
+              onClick={handleLike}
+              className="like-dislike-btn"
+              style={{ color: userReaction === 'like' ? '#3ea6ff' : '#000' }}
+            >
+              👍 {likes}
             </button>
 
-            <button onClick={handleDislike} style={{ color: userReaction === 'dislike' ? 'red' : 'gray' }}>
-              👎 {dislikes} {t('video.dislike')}
+            <button
+              onClick={handdislike}
+              className="like-dislike-btn"
+              style={{ color: userReaction === 'dislike' ? 'red' : '#000' }}
+            >
+              👎 {dislikes}
             </button>
           </div>
 
@@ -128,6 +136,13 @@ function Video() {
           <div className="video-description">
             <div className={showFullDescription ? '' : 'description-collapsed'}>
               <p>{video.meta.description || t('video.no_description')}</p>
+
+              {/* Category */}
+              {(video.categories || video.meta?.categories) && (
+                <div className="video-category">
+                  <strong>Category:</strong> {video.categories || video.meta?.categories}
+                </div>
+              )}
 
               {video.meta?.tags?.length > 0 && (
                 <div className="tags-container">
@@ -171,7 +186,7 @@ function Video() {
                 </div>
               ))
             ) : (
-              <p>{t('video.no_comments')}</p>
+              <p className="no-comments-text"> No comments yet. </p>
             )}
           </div>
         </div>

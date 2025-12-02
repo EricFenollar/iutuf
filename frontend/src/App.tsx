@@ -5,6 +5,7 @@ import Home from './pages/Home';
 import Video from './pages/Video';
 import Login from './pages/Login';
 import Register from './pages/Register';
+import UploadVideo from './pages/VideoUpload';
 
 import LanguageSwitcher from './components/LanguageSwitcher';
 import './i18n';
@@ -15,9 +16,10 @@ function App() {
     <AuthProvider>
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/video/:id" element={<Video />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/video/:id" element={<Video />} />
+        <Route path="/upload" element={<UploadVideo />} />
       </Routes>
     </AuthProvider>
   );
