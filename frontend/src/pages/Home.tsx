@@ -15,7 +15,7 @@ function Home() {
 
   const [searchTerm, setSearchTerm] = useState('');
   const [showUpload, setShowUpload] = useState(false);
-  const { isAuthenticated, logout } = useAuth();
+  const { user, isAuthenticated, logout } = useAuth();
   const { t } = useTranslation();
 
   useEffect(() => {
@@ -73,6 +73,13 @@ function Home() {
           <Link to="/upload" className="upload-link">
             Upload
           </Link>
+
+          {/* My Profile */}
+          {isAuthenticated && (
+            <Link to={user ? `/profile/${user.id}` : '/profile'} className="login-link">
+              My Profile
+            </Link>
+          )}
 
           <Link
             to={isAuthenticated ? '/' : '/login'}

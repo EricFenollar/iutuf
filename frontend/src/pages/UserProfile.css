@@ -1,0 +1,29 @@
+/* Extiende el estilo de Home.css */
+.profile-content {
+    padding: 2%;
+    color: white;
+}
+
+.not-logged {
+    text-align: center;
+    padding-top: 10vh;
+    color: white;
+}
+
+.login-button {
+    display: inline-block;
+    margin-top: 2vh;
+    padding: 0.7em 1.5em;
+    background-color: #3ea6ff;
+    color: white;
+    font-weight: bold;
+    border-radius: 0.6em;
+    text-decoration: none;
+}
+
+.login-button:hover {
+    background-color: #1e90ff;
+}
+
+/* Video grid heredará el estilo existente */
+
