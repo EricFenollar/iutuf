@@ -4,7 +4,7 @@ import { useAuth } from '../context/AuthContext';
 import { getEnv } from '../utils/Env';
 import VideoGrid from '../components/VideoGrid';
 import { Link, useParams } from 'react-router-dom';
-import {useUserVideos} from "../useUserVideos";
+import { useUserVideos } from '../useUserVideos';
 
 function UserProfile() {
   const { user, isAuthenticated, logout } = useAuth();
@@ -35,10 +35,10 @@ function UserProfile() {
   if (loading === 'loading') return <div>Loading...</div>;
   if (loading === 'error')
     return (
-        <div>
-          <h3>Error</h3>
-          <p>{message}</p>
-        </div>
+      <div>
+        <h3>Error</h3>
+        <p>{message}</p>
+      </div>
     );
 
   return (
@@ -65,20 +65,16 @@ function UserProfile() {
 
       {/* CONTENIDO */}
       <main className="profile-content">
-        <h2>
-          {username === user ? "Your Videos" : `${username}'s Videos`}
-        </h2>
+        <h2>{username === user ? 'Your Videos' : `${username}'s Videos`}</h2>
 
         {loading ? (
-            <p>Loading...</p>
+          <p>Loading...</p>
         ) : videos.length === 0 ? (
-            <p>
-              {username === user
-                  ? "You haven't uploaded any videos yet."
-                  : `${username} hasn't uploaded any videos yet.`}
-            </p>
+          <p>
+            {username === user ? "You haven't uploaded any videos yet." : `${username} hasn't uploaded any videos yet.`}
+          </p>
         ) : (
-            <VideoGrid videos={videos} />
+          <VideoGrid videos={videos} />
         )}
       </main>
     </div>
