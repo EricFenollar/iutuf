@@ -63,7 +63,7 @@ function UserProfile() {
         </div>
       </header>
 
-      {/* CONTENIDO */}
+      {/* CONTENT */}
       <main className="profile-content">
         <h2>{username === user ? 'Your Videos' : `${username}'s Videos`}</h2>
 
