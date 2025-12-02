@@ -30,7 +30,6 @@ export function useUserVideos(username: string) {
     if (username) {
       getVideos();
     }
-
   }, [username]);
 
   return { value, message, loading };
