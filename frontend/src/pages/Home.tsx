@@ -4,6 +4,9 @@ import VideoGrid from '../components/VideoGrid';
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import UploadModal from '../components/uploadModel';
+import { useTranslation } from 'react-i18next';
+import LanguageSwitcher from '../components/LanguageSwitcher';
 
 function Home() {
   const { loading, message, value: allVideos } = useAllVideos();
@@ -11,10 +14,9 @@ function Home() {
   const [displayVideos, setDisplayVideos] = useState<any[]>([]);
 
   const [searchTerm, setSearchTerm] = useState('');
-
+  const [showUpload, setShowUpload] = useState(false);
   const { isAuthenticated, logout } = useAuth();
-
-  // 初始化时加载视频
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (loading === 'success' && allVideos) {
@@ -22,11 +24,8 @@ function Home() {
     }
   }, [loading, allVideos]);
 
-  // 搜索功能
-
   useEffect(() => {
     if (!allVideos) return;
-
     if (searchTerm.trim() === '') {
       setDisplayVideos(allVideos);
     } else {
@@ -36,21 +35,16 @@ function Home() {
     }
   }, [searchTerm, allVideos]);
 
-  // 上传成功后的回调
-
   function handleUploadSuccess(video: any) {
-    // 添加到顶部（体验更好）
-
     setDisplayVideos((prev) => [video, ...prev]);
+    setShowUpload(false);
   }
 
-  if (loading === 'loading') return <div>Loading...</div>;
-
+  if (loading === 'loading') return <div>{t('common.loading')}</div>;
   if (loading === 'error')
     return (
       <div>
-        <h3>Error</h3>
-
+        <h3>{t('common.error')}</h3>
         <p>{message}</p>
       </div>
     );
@@ -65,9 +59,12 @@ function Home() {
         </div>
 
         <div className="header-right">
+          {/* 🌍 放在上传按钮左边的语言切换器 */}
+          <LanguageSwitcher />
+
           <input
             type="text"
-            placeholder="Search videos..."
+            placeholder={t('header.search_placeholder')}
             className="search-bar"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
@@ -82,7 +79,7 @@ function Home() {
             className="login-link"
             onClick={isAuthenticated ? logout : undefined}
           >
-            {isAuthenticated ? 'Logout' : 'Login'}
+            {isAuthenticated ? t('header.logout') : t('header.login')}
           </Link>
         </div>
       </header>

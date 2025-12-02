@@ -121,27 +121,59 @@ public class VideosController {
             @RequestParam("file") MultipartFile file,
             @RequestParam("username") String username,
             @RequestParam("title") String title,
-            @RequestParam("description") String description
+            @RequestParam(value = "description", required = false) String description
     ) {
         try {
             if (file == null || file.isEmpty()) {
                 throw new RuntimeException("File is null or empty");
             }
 
-            // 1. 固定保存目录 C:/videos
-            Path root = Paths.get("C:/videos");
+            // 允许 description 为 null
+            if (description == null) description = "";
 
-            // 如果目录不存在则创建
+            // 1. 保存目录
+            Path root = Paths.get("C:/videos");
             Files.createDirectories(root);
 
-            // 2. 生成文件名
-            String fileName = UUID.randomUUID() + "_" + file.getOriginalFilename();
+            // 2. 生成视频文件名
+            String original = file.getOriginalFilename();
+            String ext = original.substring(original.lastIndexOf("."));     // 自动获取扩展名
+            String fileName = UUID.randomUUID() + ext;
             Path savePath = root.resolve(fileName);
 
-            // 3. 保存文件
+            // 3. 保存视频文件
             file.transferTo(savePath.toFile());
 
-            // 4. 构建 Video 对象
+            // =======================
+            // 🌟 自动生成缩略图
+            // =======================
+
+            // 缩略图固定为 webp
+            String thumbnailName = fileName.substring(0, fileName.lastIndexOf(".")) + ".webp";
+            Path thumbPath = root.resolve(thumbnailName);
+
+            // ffmpeg 命令（稳定版）
+            ProcessBuilder pb = new ProcessBuilder(
+                    "ffmpeg", "-y",
+                    "-i", savePath.toString(),
+                    "-ss", "00:00:01",         // 截取第 1 秒
+                    "-vframes", "1",           // 截一张图
+                    "-vf", "scale=320:-1",     // 缩略图大小（保持比例）
+                    thumbPath.toString()
+            );
+
+            pb.redirectErrorStream(true);
+            Process process = pb.start();
+            process.waitFor();
+
+            if (!thumbPath.toFile().exists()) {
+                throw new RuntimeException("Thumbnail generation failed");
+            }
+
+            // =======================
+            // 保存视频信息
+            // =======================
+
             Video v = new Video();
             v.setId(System.currentTimeMillis());
             v.setTitle(title);
@@ -150,6 +182,7 @@ public class VideosController {
 
             VideoMeta meta = new VideoMeta();
             meta.setDescription(description);
+            meta.setThumbnail(thumbPath.toString());   // 设置缩略图路径
             v.setMeta(meta);
 
             Video saved = videoService.saveVideo(v);
@@ -157,9 +190,12 @@ public class VideosController {
             return ResponseEntity.ok(saved);
 
         } catch (Exception e) {
-            throw new RuntimeException("Error al subir video: " + e.getMessage());
+            e.printStackTrace();
+            throw new RuntimeException("Error uploading video: " + e.getMessage());
         }
     }
+
+
 
 
 
