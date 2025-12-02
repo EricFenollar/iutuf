@@ -69,7 +69,9 @@ function Video() {
       setLikes(data.likeCount);
       setDislikes(data.dislikeCount);
       setReaction(data.reaction);
-    } catch {}
+    } catch {
+      return;
+    }
   }
 
   // ---- Dislike ----
@@ -84,7 +86,9 @@ function Video() {
       setLikes(data.likeCount);
       setDislikes(data.dislikeCount);
       setReaction(data.reaction);
-    } catch {}
+    } catch {
+      return;
+    }
   }
 
   if (!video) return <p>{t('common.loading')}</p>;
