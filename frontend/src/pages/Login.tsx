@@ -57,9 +57,7 @@ function Login() {
         </button>
 
         <Link to="/register">
-          <button className="auth-button secondary">
-            {t('login.signup_button')}
-          </button>
+          <button className="auth-button secondary">{t('login.signup_button')}</button>
         </Link>
 
         <Link className="auth-back" to="/">
