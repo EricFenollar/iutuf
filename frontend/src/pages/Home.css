@@ -57,7 +57,25 @@ h2 {
   margin-top: 2vh;
 }
 
+/* ------------------------------ */
+/* 🔵 Login Link (Home 右上角)    */
+/* ------------------------------ */
 .login-link {
+  margin-left: clamp(8px, 2vw, 20px);
+  font-size: clamp(12px, 1.2vw, 18px);
+  color: #3ea6ff;
+  cursor: pointer;
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.2s ease;
+  padding: 8px 12px;
+}
+
+.login-link:hover {
+  color: #1e90ff;
+}
+
+.upload-link {
   margin-left: clamp(8px, 2vw, 20px);
   font-size: clamp(12px, 1.2vw, 18px);
   color: #3ea6ff;
@@ -68,29 +86,11 @@ h2 {
   padding: 0.3em 0;
 }
 
-.login-link:hover {
+.upload-link:hover {
   color: #1e90ff;
 }
 
-.upload-btn {
-  display: inline-block;
-  margin-top: 2vh;
-  padding: 0.7em 1.5em;
-  color: #3ea6ff;
-  font-weight: bold;
-  border-radius: 0.6em;
-  text-decoration: none;
-}
 
-.profile-link {
-  display: inline-block;
-  margin-top: 2vh;
-  padding: 0.7em 1.5em;
-  color: #3ea6ff;
-  font-weight: bold;
-  border-radius: 0.6em;
-  text-decoration: none;
-}
 
 @keyframes App-logo-spin {
   from {
