@@ -14,8 +14,8 @@ const VideoCard = ({ video }: { video: any }) => {
           borderRadius: '1%',
           overflow: 'hidden',
           transition: 'transform 0.2s ease-in-out',
-          backgroundColor: '#202020',
-          border: '1px solid #333',
+          backgroundColor: 'var(--bg-secondary)',
+          border: '1px solid var(--border-color)',
         }}
         onMouseEnter={(e) => (e.currentTarget.style.transform = 'scale(1.03)')}
         onMouseLeave={(e) => (e.currentTarget.style.transform = 'scale(1)')}
@@ -49,8 +49,8 @@ const VideoCard = ({ video }: { video: any }) => {
         <div
           className="card-body text-center"
           style={{
-            backgroundColor: '#202020',
-            color: '#fff',
+            backgroundColor: 'var(--bg-secondary)',
+            color: 'var(--text-primary)',
             padding: '1%',
           }}
         >
@@ -69,7 +69,7 @@ const VideoCard = ({ video }: { video: any }) => {
           <p
             style={{
               margin: 0,
-              color: '#aaa',
+              color: 'var(--text-secondary)',
               fontSize: '0.9rem',
             }}
           >

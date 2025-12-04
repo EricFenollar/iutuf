@@ -118,7 +118,7 @@ function Video() {
             <button
               onClick={handleLike}
               className="like-dislike-btn"
-              style={{ color: userReaction === 'like' ? '#3ea6ff' : '#000' }}
+              style={{ color: userReaction === 'like' ? '#3ea6ff' : 'var(--text-primary)'}}
             >
               👍 {likes}
             </button>
@@ -126,7 +126,7 @@ function Video() {
             <button
               onClick={handleDislike}
               className="like-dislike-btn"
-              style={{ color: userReaction === 'dislike' ? 'red' : '#000' }}
+              style={{ color: userReaction === 'dislike' ? 'red' : 'var(--text-primary)' }}
             >
               👎 {dislikes}
             </button>
@@ -163,9 +163,7 @@ function Video() {
           </div>
 
           {/* Comments */}
-          <div className="comment-title">
-            {video.meta?.comments?.length || 0} Comments
-          </div>
+          <div className="comment-title">{video.meta?.comments?.length || 0} Comments</div>
 
           <div className="comment-wrapper">
             <input
