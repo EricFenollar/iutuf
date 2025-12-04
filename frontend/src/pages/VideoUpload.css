@@ -3,15 +3,16 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #000;
+    background-color: var(--bg-main);
     font-family: Arial, sans-serif;
     padding: 1rem;
     box-sizing: border-box;
+    transition: background-color 0.3s ease;
 }
 
 .upload-container {
-    background-color: #202020;
-    color: #3ea6ff;
+    background-color: var(--bg-secondary);
+    color: var(--accent-color);
     padding: clamp(1.5rem, 5vw, 2rem);
     border-radius: 1rem;
     width: 100%;
@@ -21,12 +22,13 @@
     gap: 1rem;
     box-sizing: border-box;
     box-shadow: 0 0.5rem 1.25rem rgba(0,0,0,0.5);
+    border: 1px solid var(--border-color);
 }
 
 .upload-container h2 {
     text-align: center;
     margin-bottom: 0.5rem;
-    color: #3ea6ff;
+    color: var(--accent-color);
     font-size: 1.5rem;
 }
 
@@ -34,11 +36,11 @@
 .upload-container textarea {
     padding: 0.8rem;
     border-radius: 0.5rem;
-    border: 1px solid #333;
+    border: 1px solid var(--border-color);
     outline: none;
     font-size: 1rem;
-    background-color: #121212;
-    color: #fff;
+    background-color: var(--bg-input);
+    color: var(--text-primary);
     width: 100%;
     box-sizing: border-box;
 }
@@ -53,18 +55,19 @@
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
-    color: #aaa;
+    color: var(--text-secondary);
     font-size: 0.9rem;
 }
 
 .upload-container input[type="file"] {
-    background-color: #121212;
+    background-color: var(--bg-input);
     padding: 0.5rem;
     border-radius: 0.5rem;
-    color: #aaa;
+    color: var(--text-secondary);
     font-size: 0.9rem;
     width: 100%;
     box-sizing: border-box;
+    border: 1px solid var(--border-color);
 }
 
 /* Barra de Progreso */
@@ -78,26 +81,27 @@
 .progress-container {
     flex-grow: 1;
     height: 0.625rem;
-    background: #333;
+    background: var(--bg-input);
     border-radius: 0.3125rem;
     overflow: hidden;
+    border: 1px solid var(--border-color);
 }
 
 .progress-bar {
     height: 100%;
-    background: linear-gradient(90deg, #3ea6ff, #0077b6);
+    background: linear-gradient(90deg, var(--accent-color), #0077b6);
     transition: width 0.2s ease;
 }
 
 .progress-text {
-    color: #fff;
+    color: var(--text-primary);
     font-size: 0.9rem;
     min-width: 2.5rem;
     text-align: right;
 }
 
 .upload-container button {
-    background-color: #3ea6ff;
+    background-color: var(--accent-color);
     color: #fff;
     font-weight: 600;
     padding: 0.8rem;
@@ -111,7 +115,7 @@
 }
 
 .upload-container button:hover {
-    background-color: #1e90ff;
+    filter: brightness(1.1);
 }
 
 .upload-container button:disabled {
@@ -131,11 +135,13 @@
 .upload-message.error {
     background-color: rgba(255, 0, 0, 0.2);
     color: #ff4d4d;
+    border: 1px solid #ff4d4d;
 }
 
 .upload-message.success {
     background-color: rgba(0, 255, 0, 0.1);
     color: #4caf50;
+    border: 1px solid #4caf50;
 }
 
 /* Ajustes específicos para pantallas pequeñas */
