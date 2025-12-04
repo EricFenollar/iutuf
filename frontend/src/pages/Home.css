@@ -57,9 +57,6 @@ h2 {
   margin-top: 2vh;
 }
 
-/* ------------------------------ */
-/* 🔵 Login Link (Home 右上角)    */
-/* ------------------------------ */
 .login-link {
   margin-left: clamp(8px, 2vw, 20px);
   font-size: clamp(12px, 1.2vw, 18px);
@@ -68,7 +65,7 @@ h2 {
   text-decoration: none;
   font-weight: 600;
   transition: color 0.2s ease;
-  padding: 8px 12px;
+  padding: 0.3em 0;
 }
 
 .login-link:hover {

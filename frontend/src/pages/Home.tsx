@@ -4,9 +4,8 @@ import VideoGrid from '../components/VideoGrid';
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import UploadModal from '../components/uploadModel';
-import { useTranslation } from 'react-i18next';
-import LanguageSwitcher from '../components/LanguageSwitcher';
+//import { useTranslation } from 'react-i18next';
+//import LanguageSwitcher from '../components/LanguageSwitcher';
 
 function Home() {
   const { loading, message, value: allVideos } = useAllVideos();
@@ -15,8 +14,8 @@ function Home() {
 
   const [searchTerm, setSearchTerm] = useState('');
   const [showUpload, setShowUpload] = useState(false);
-  const { user, isAuthenticated, logout } = useAuth();
-  const { t } = useTranslation();
+  const { username, isAuthenticated, logout } = useAuth();
+  //const { t } = useTranslation();
 
   useEffect(() => {
     if (loading === 'success' && allVideos) {
@@ -35,16 +34,11 @@ function Home() {
     }
   }, [searchTerm, allVideos]);
 
-  function handleUploadSuccess(video: any) {
-    setDisplayVideos((prev) => [video, ...prev]);
-    setShowUpload(false);
-  }
-
-  if (loading === 'loading') return <div>{t('common.loading')}</div>;
+  if (loading === 'loading') return <div>Loading...</div>;
   if (loading === 'error')
     return (
       <div>
-        <h3>{t('common.error')}</h3>
+        <h3>Error</h3>
         <p>{message}</p>
       </div>
     );
@@ -59,24 +53,18 @@ function Home() {
         </div>
 
         <div className="header-right">
-          {/* 🌍 放在上传按钮左边的语言切换器 */}
-          <LanguageSwitcher />
 
           <input
             type="text"
-            placeholder={t('header.search_placeholder')}
+            placeholder="Search videos..."
             className="search-bar"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
 
-          <Link to="/upload" className="upload-link">
-            Upload
-          </Link>
-
           {/* My Profile */}
           {isAuthenticated && (
-            <Link to={user ? `/profile/${user.id}` : '/profile'} className="login-link">
+            <Link to={username ? `/profile/${username}` : '/profile'} className="login-link">
               My Profile
             </Link>
           )}
@@ -86,7 +74,7 @@ function Home() {
             className="login-link"
             onClick={isAuthenticated ? logout : undefined}
           >
-            {isAuthenticated ? t('header.logout') : t('header.login')}
+            {isAuthenticated ? 'Logout' : 'Login'}
           </Link>
         </div>
       </header>

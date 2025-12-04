@@ -56,6 +56,13 @@ function UserProfile() {
           <Link to="/" className="login-link">
             Home
           </Link>
+
+          {isAuthenticated && (
+              <Link to={username== user ? `/upload` : '/profile'} className="login-link">
+                Upload
+              </Link>
+          )}
+
           <span className="login-link">My Profile</span>
           <Link to="/" className="login-link" onClick={logout}>
             Logout
