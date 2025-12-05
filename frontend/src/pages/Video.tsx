@@ -118,7 +118,7 @@ function Video() {
             <button
               onClick={handleLike}
               className="like-dislike-btn"
-              style={{ color: userReaction === 'like' ? '#3ea6ff' : 'var(--text-primary)'}}
+              style={{ color: userReaction === 'like' ? '#3ea6ff' : 'var(--text-primary)' }}
             >
               👍 {likes}
             </button>
