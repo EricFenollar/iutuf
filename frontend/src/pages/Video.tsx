@@ -3,13 +3,13 @@ import { getEnv } from '../utils/Env';
 import { useEffect, useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import './Video.css';
-import { useTranslation } from 'react-i18next';
+//import { useTranslation } from 'react-i18next';
 
 function Video() {
   const { id } = useParams();
   const navigate = useNavigate();
   const { username, isAuthenticated } = useAuth();
-  const { t } = useTranslation();
+  //const { t } = useTranslation();
 
   const [showFullDescription, setShowFullDescription] = useState(false);
   const [video, setVideo] = useState<any | null>(null);
@@ -19,7 +19,6 @@ function Video() {
   const handleComment = async (e) => {
     if (e.key !== 'Enter') return;
     if (!commentText.trim() || !isAuthenticated) return;
-
     try {
       const response = await fetch(`${getEnv().API_BASE_URL}/api/videos/${id}/comments`, {
         method: 'POST',
@@ -91,7 +90,7 @@ function Video() {
     }
   }
 
-  if (!video) return <p>{t('common.loading')}</p>;
+  if (!video) return <p>Loading...</p>;
 
   return (
     <div className="video-modal">
@@ -118,15 +117,15 @@ function Video() {
             <button
               onClick={handleLike}
               className="like-dislike-btn"
-              style={{ color: userReaction === 'like' ? '#3ea6ff' : '#000' }}
+              style={{ color: userReaction === 'like' ? '#3ea6ff' : 'var(--text-primary)' }}
             >
               👍 {likes}
             </button>
 
             <button
-              onClick={handdislike}
+              onClick={handleDislike}
               className="like-dislike-btn"
-              style={{ color: userReaction === 'dislike' ? 'red' : '#000' }}
+              style={{ color: userReaction === 'dislike' ? 'red' : 'var(--text-primary)' }}
             >
               👎 {dislikes}
             </button>
@@ -135,7 +134,7 @@ function Video() {
           {/* Description */}
           <div className="video-description">
             <div className={showFullDescription ? '' : 'description-collapsed'}>
-              <p>{video.meta.description || t('video.no_description')}</p>
+              <p>{video.meta.description || 'No description available.'}</p>
 
               {/* Category */}
               {(video.categories || video.meta?.categories) && (
@@ -157,20 +156,18 @@ function Video() {
 
             {video.meta.description?.split('\n').length > 3 && (
               <button className="toggle-button" onClick={() => setShowFullDescription(!showFullDescription)}>
-                {showFullDescription ? t('video.show_less') : t('video.show_more')}
+                {showFullDescription ? 'Show less' : 'Show more'}
               </button>
             )}
           </div>
 
           {/* Comments */}
-          <div className="comment-title">
-            {video.meta?.comments?.length || 0} {t('video.comments')}
-          </div>
+          <div className="comment-title">{video.meta?.comments?.length || 0} Comments</div>
 
           <div className="comment-wrapper">
             <input
               type="text"
-              placeholder={t('video.add_comment_placeholder')}
+              placeholder="Add a comment..."
               className="comment-input"
               value={commentText}
               onChange={(e) => setCommentText(e.target.value)}

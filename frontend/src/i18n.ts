@@ -1,5 +1,5 @@
-import i18n from 'i18next';
-import { initReactI18next } from 'react-i18next';
+//import i18n from 'i18next';
+//import { initReactI18next } from 'react-i18next';
 
 // 从 localStorage 读取用户语言；默认英文
 const savedLang = localStorage.getItem('lang') || 'en';
