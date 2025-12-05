@@ -19,7 +19,6 @@ function Video() {
   const handleComment = async (e) => {
     if (e.key !== 'Enter') return;
     if (!commentText.trim() || !isAuthenticated) return;
-
     try {
       const response = await fetch(`${getEnv().API_BASE_URL}/api/videos/${id}/comments`, {
         method: 'POST',

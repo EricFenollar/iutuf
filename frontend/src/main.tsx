@@ -6,7 +6,6 @@ import 'bootstrap/dist/css/bootstrap.css';
 import { AuthProvider } from './context/AuthContext.jsx';
 import './App.css';
 import { AppTheme } from './context/AppTheme.tsx';
-
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <AuthProvider>
