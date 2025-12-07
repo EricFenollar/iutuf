@@ -1,32 +1,37 @@
-.App {
-  text-align: center;
+:root {
+  /* MODO CLARO */
+  --bg-main: #f9f9f9;
+  --bg-secondary: #ffffff;
+  --bg-input: #f0f0f0;
+  --text-primary: #000000;
+  --text-secondary: #606060;
+  --border-color: #ccc;
+  --accent-color: #3ea6ff;
+  --hover-bg: #e5e5e5;
+  --bg-overlay: rgba(0, 0, 0, 0.5);
+  --card-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+/* MODO OSCURO */
+[data-theme='dark'] {
+  --bg-main: #000000;
+  --bg-secondary: #202020;
+  --bg-input: #121212;
+  --text-primary: #ffffff;
+  --text-secondary: #aaaaaa;
+  --border-color: #333;
+  --accent-color: #3ea6ff;
+  --hover-bg: #333;
+  --bg-overlay: rgba(0, 0, 0, 0.9);
+  --card-shadow: none;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+body {
+  margin: 0;
+  padding: 0;
+  background-color: var(--bg-main);
+  color: var(--text-primary);
+  font-family: Arial, sans-serif;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
