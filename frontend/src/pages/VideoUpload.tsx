@@ -68,7 +68,6 @@ function VideoUpload() {
       await axios.post(url, formData, config);
 
       setMessage('Upload successful!');
-
       setTimeout(() => {
         setUploading(false);
         navigate('/');
