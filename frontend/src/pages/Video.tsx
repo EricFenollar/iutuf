@@ -19,7 +19,6 @@ function Video() {
   const handleComment = async (e) => {
     if (e.key !== 'Enter') return;
     if (!commentText.trim() || !isAuthenticated) return;
-
     try {
       const response = await fetch(`${getEnv().API_BASE_URL}/api/videos/${id}/comments`, {
         method: 'POST',
@@ -118,7 +117,7 @@ function Video() {
             <button
               onClick={handleLike}
               className="like-dislike-btn"
-              style={{ color: userReaction === 'like' ? '#3ea6ff' : '#000' }}
+              style={{ color: userReaction === 'like' ? '#3ea6ff' : 'var(--text-primary)' }}
             >
               👍 {likes}
             </button>
@@ -126,7 +125,7 @@ function Video() {
             <button
               onClick={handleDislike}
               className="like-dislike-btn"
-              style={{ color: userReaction === 'dislike' ? 'red' : '#000' }}
+              style={{ color: userReaction === 'dislike' ? 'red' : 'var(--text-primary)' }}
             >
               👎 {dislikes}
             </button>
@@ -163,9 +162,7 @@ function Video() {
           </div>
 
           {/* Comments */}
-          <div className="comment-title">
-            {video.meta?.comments?.length || 0} Comments
-          </div>
+          <div className="comment-title">{video.meta?.comments?.length || 0} Comments</div>
 
           <div className="comment-wrapper">
             {isAuthenticated && (

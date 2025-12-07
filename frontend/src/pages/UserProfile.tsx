@@ -5,6 +5,7 @@ import { getEnv } from '../utils/Env';
 import VideoGrid from '../components/VideoGrid';
 import { Link, useParams } from 'react-router-dom';
 import { useUserVideos } from '../useUserVideos';
+import { useTheme } from '../context/AppTheme';
 
 function UserProfile() {
   const { user, isAuthenticated, logout } = useAuth();
@@ -13,6 +14,7 @@ function UserProfile() {
   const { value: videos, loading, message } = useUserVideos(userId);
   const [displayVideos, setDisplayVideos] = useState<any[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
+  const { theme, toggleTheme } = useTheme();
 
   useEffect(() => {
     if (loading === 'success' && videos) {
@@ -58,9 +60,9 @@ function UserProfile() {
           </Link>
 
           {isAuthenticated && (
-              <Link to={username== user ? `/upload` : '/profile'} className="login-link">
-                Upload
-              </Link>
+            <Link to={username == user ? `/upload` : '/profile'} className="login-link">
+              Upload
+            </Link>
           )}
 
           <span className="login-link">My Profile</span>

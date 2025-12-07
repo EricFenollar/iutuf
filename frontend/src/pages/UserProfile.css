@@ -1,28 +1,33 @@
 /* Extiende el estilo de Home.css */
 .profile-content {
     padding: 2%;
-    color: white;
+    color: var(--text-primary);
+    background-color: var(--bg-main);
+    min-height: 90vh;
 }
 
 .not-logged {
     text-align: center;
-    padding-top: 10vh;
-    color: white;
+    padding-top: 5vh;
+    color: var(--text-secondary);
+    font-size: 1.2rem;
 }
 
 .login-button {
     display: inline-block;
     margin-top: 2vh;
     padding: 0.7em 1.5em;
-    background-color: #3ea6ff;
-    color: white;
+    background-color: var(--accent-color);
+    color: #fff;
     font-weight: bold;
     border-radius: 0.6em;
     text-decoration: none;
+    transition: background-color 0.2s, transform 0.2s;
 }
 
 .login-button:hover {
     background-color: #1e90ff;
+    transform: translateY(-2px);
 }
 
 /* Video grid heredará el estilo existente */

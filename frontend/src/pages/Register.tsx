@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { getEnv } from '../utils/Env';
+import { useTheme } from '../context/AppTheme';
 //import { useTranslation } from 'react-i18next';
 
 const REGISTER_URL = `${getEnv().API_BASE_URL}/api/auth/register`;
@@ -10,6 +11,7 @@ const REGISTER_URL = `${getEnv().API_BASE_URL}/api/auth/register`;
 function Register() {
   //const { t } = useTranslation();
   const { login } = useAuth();
+  const { theme, toggleTheme } = useTheme();
 
   const [email, setEmail] = useState('');
   const [username, setUsername] = useState('');
@@ -22,7 +24,7 @@ function Register() {
     e.preventDefault();
 
     if (password !== passwordConfirm) {
-      alert("Password mismatch");
+      alert('Password mismatch');
       return;
     }
 
@@ -59,12 +61,7 @@ function Register() {
       <div className="auth-container">
         <h2>Register</h2>
 
-        <input
-          className="auth-input"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
+        <input className="auth-input" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
 
         <input
           className="auth-input"

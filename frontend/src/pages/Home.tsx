@@ -4,6 +4,7 @@ import VideoGrid from '../components/VideoGrid';
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { useTheme } from '../context/AppTheme';
 //import { useTranslation } from 'react-i18next';
 //import LanguageSwitcher from '../components/LanguageSwitcher';
 
@@ -15,6 +16,8 @@ function Home() {
   const [searchTerm, setSearchTerm] = useState('');
   const [showUpload, setShowUpload] = useState(false);
   const { username, isAuthenticated, logout } = useAuth();
+
+  const { theme, toggleTheme } = useTheme();
   //const { t } = useTranslation();
 
   useEffect(() => {
@@ -53,6 +56,12 @@ function Home() {
         </div>
 
         <div className="header-right">
+          <button
+            onClick={toggleTheme}
+            style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '1.2rem', marginRight: '15px' }}
+          >
+            {theme === 'light' ? '🌙' : '☀️'}
+          </button>
 
           <input
             type="text"
