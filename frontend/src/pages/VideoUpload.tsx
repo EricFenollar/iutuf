@@ -49,10 +49,13 @@ function VideoUpload() {
       formData.append('description', description);
       formData.append('username', username || 'Anonymous');
 
+      setError("a");
+
       const env = getEnv();
       const baseUrl = env.API_BASE_URL || 'http://localhost:8080';
       const url = `${baseUrl}/api/videos/upload`;
 
+      setError("b");
       const config: any = {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -64,20 +67,22 @@ function VideoUpload() {
           }
         },
       };
+      setError("c");
 
       await axios.post(url, formData, config);
 
       setMessage('Upload successful!');
-
+      setError("e");
       setTimeout(() => {
         setUploading(false);
         navigate('/');
       }, 1000);
+      setError("d");
     } catch (err: any) {
       console.error('Upload Error:', err);
 
       const serverMessage = err.response?.data?.message || err.response?.data || err.message;
-      setError(typeof serverMessage === 'string' ? serverMessage : 'Upload failed (Unknown error)');
+      //setError(typeof serverMessage === 'string' ? serverMessage : 'Upload failed (Unknown error)');
       setUploading(false);
     }
   };

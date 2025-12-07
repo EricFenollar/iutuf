@@ -168,14 +168,16 @@ function Video() {
           </div>
 
           <div className="comment-wrapper">
-            <input
-              type="text"
-              placeholder="Add a comment..."
-              className="comment-input"
-              value={commentText}
-              onChange={(e) => setCommentText(e.target.value)}
-              onKeyDown={handleComment}
-            />
+            {isAuthenticated && (
+              <input
+                type="text"
+                placeholder="Add a comment..."
+                className="comment-input"
+                value={commentText}
+                onChange={(e) => setCommentText(e.target.value)}
+                onKeyDown={handleComment}
+              />
+            )}
 
             {video.meta?.comments?.length ? (
               video.meta.comments.map((c: any, i: number) => (

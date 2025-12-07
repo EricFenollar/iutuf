@@ -136,9 +136,11 @@ public class VideosController {
             Files.createDirectories(root);
 
             // 2. 生成视频文件名
-            String original = file.getOriginalFilename();
+            String fileName = UUID.randomUUID() + "_" + file.getOriginalFilename();
+
+            /*String original = file.getOriginalFilename();
             String ext = original.substring(original.lastIndexOf("."));     // 自动获取扩展名
-            String fileName = UUID.randomUUID() + ext;
+            String fileName = UUID.randomUUID() + ext;*/
             Path savePath = root.resolve(fileName);
 
             // 3. 保存视频文件
@@ -149,7 +151,7 @@ public class VideosController {
             // =======================
 
             // 缩略图固定为 webp
-            String thumbnailName = fileName.substring(0, fileName.lastIndexOf(".")) + ".webp";
+            /*String thumbnailName = fileName.substring(0, fileName.lastIndexOf(".")) + ".webp";
             Path thumbPath = root.resolve(thumbnailName);
 
             // ffmpeg 命令（稳定版）
@@ -168,7 +170,7 @@ public class VideosController {
 
             if (!thumbPath.toFile().exists()) {
                 throw new RuntimeException("Thumbnail generation failed");
-            }
+            }*/
 
             // =======================
             // 保存视频信息
@@ -182,7 +184,7 @@ public class VideosController {
 
             VideoMeta meta = new VideoMeta();
             meta.setDescription(description);
-            meta.setThumbnail(thumbPath.toString());   // 设置缩略图路径
+            //meta.setThumbnail(thumbPath.toString());   // 设置缩略图路径
             v.setMeta(meta);
 
             Video saved = videoService.saveVideo(v);
