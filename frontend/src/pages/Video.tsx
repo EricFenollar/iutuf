@@ -3,13 +3,11 @@ import { getEnv } from '../utils/Env';
 import { useEffect, useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import './Video.css';
-//import { useTranslation } from 'react-i18next';
 
 function Video() {
   const { id } = useParams();
   const navigate = useNavigate();
   const { username, isAuthenticated } = useAuth();
-  //const { t } = useTranslation();
 
   const [showFullDescription, setShowFullDescription] = useState(false);
   const [video, setVideo] = useState<any | null>(null);

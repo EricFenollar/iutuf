@@ -3,7 +3,6 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { getEnv } from '../utils/Env';
-//import { useTranslation } from 'react-i18next';
 
 const LOGIN_URL = `${getEnv().API_BASE_URL}/api/auth/login`;
 
@@ -12,7 +11,6 @@ function Login() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
-  //const { t } = useTranslation();
 
   const handleLogin = async (e: any) => {
     e.preventDefault();
