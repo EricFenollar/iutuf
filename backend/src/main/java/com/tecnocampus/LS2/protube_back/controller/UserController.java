@@ -1,8 +1,10 @@
 package com.tecnocampus.LS2.protube_back.controller;
 
 import com.tecnocampus.LS2.protube_back.persistence.LoginRequest;
+import com.tecnocampus.LS2.protube_back.persistence.LoginResponse;
 import com.tecnocampus.LS2.protube_back.persistence.User;
 import com.tecnocampus.LS2.protube_back.services.UserService;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,39 +14,31 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/auth")
-public class AuthController {
+public class UserController {
     @Autowired
     private UserService userService;
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody User user){
-        if(userService.existsByUsername(user.getUsername())){
-            return ResponseEntity.badRequest().body("Username is already taken");
+        try {
+            userService.createUser(user);
+        } catch (Exception e){
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
-        userService.saveUser(user);
         return ResponseEntity.ok().body("User registered successfully");
     }
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginRequest request) {
-        // 1️⃣ Find user by username
-        User existingUser = userService.findByUsername(request.getUsername());
-        if (existingUser == null) {
-            return ResponseEntity.status(404).body("User not found");
+    public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request) {
+        try {
+            LoginResponse response = userService.login(request);
+            if ("Incorrect password".equals(response.getMessage())) {
+                return ResponseEntity.status(401).body(response);
+            }
+            return ResponseEntity.ok(response);
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(404)
+                    .body(new LoginResponse(request.getUsername(), null, "User not found"));
         }
-
-        // 2️⃣ Compare password (plain text vs encrypted one)
-        boolean match = userService.checkPassword(
-                request.getPassword(),
-                existingUser.getPassword()
-        );
-
-        // 3️⃣ Handle incorrect password
-        if (!match) {
-            return ResponseEntity.status(401).body("Incorrect password");
-        }
-
-        // 4️⃣ Successful login
-        return ResponseEntity.ok("Login successful ");
     }
 
     @PostMapping("/logout")

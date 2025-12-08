@@ -1,7 +1,10 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="ProtubeBackApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
     <envs>
-      <env name="ENV_PROTUBE_STORE_DIR" value="C:\Users\ericf\Desktop\videos" />
+      <env name="ENV_PROTUBE_DELETE_PREVIOUS_DATA" value="true" />
+      <env name="ENV_PROTUBE_INITIAL_VIDEOS_DIR" value="C:\Users\ericf\Desktop\videos" />
+      <env name="ENV_PROTUBE_LOAD_INITIAL_DATA" value="true" />
+      <env name="ENV_PROTUBE_STORE_DIR" value="C:\Users\ericf\Desktop\storage" />
     </envs>
     <module name="protube-back" />
     <option name="SPRING_BOOT_MAIN_CLASS" value="com.tecnocampus.LS2.protube_back.ProtubeBackApplication" />

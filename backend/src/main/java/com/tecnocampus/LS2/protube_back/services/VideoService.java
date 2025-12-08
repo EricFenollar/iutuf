@@ -1,63 +1,141 @@
 package com.tecnocampus.LS2.protube_back.services;
 
+import com.tecnocampus.LS2.protube_back.persistence.Comment;
 import com.tecnocampus.LS2.protube_back.persistence.Video;
-import com.tecnocampus.LS2.protube_back.repository.videoReposity;
+import com.tecnocampus.LS2.protube_back.persistence.VideoMeta;
+import com.tecnocampus.LS2.protube_back.repository.VideoRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class VideoService {
 
-    private final videoReposity videoRepository;
+    private final VideoRepository videoRepository;
 
-    @Value("${pro_tube.store.dir:C:/videos}")
-    private String videoDir;
+    @Autowired
+    UserService userService;
 
-    public VideoService(videoReposity videoRepository) {
+    @Value("${pro_tube.videos.dir}")
+    String videosDir;
+
+    @Value("${pro_tube.thumbnails.dir}")
+    String thumbnailsDir;
+
+    public VideoService(VideoRepository videoRepository) {
         this.videoRepository = videoRepository;
     }
 
-    public List<Video> getVideos() {
+    public Video getVideo(Long id){
+        return videoRepository.findById(id)
+                .orElseThrow(()->new RuntimeException("Video not found"));
+    }
 
+    public List<Video> getVideos() {
         return videoRepository.findAll();
     }
 
+    public Resource getVideoFile(Long id){
+        try {
+            Video video = videoRepository.findById(id)
+                    .orElseThrow(() -> new RuntimeException("Video not found"));
 
-    public Video getVideoById(Long id) {
-        //使用findByID从Repository获取视频，如果找不到返回一个404的错误，也就是异常
-        //Usar findBYiD para obener el vídeo del reposity,si no se encyentra , devolver un error 404
-        Video v = videoRepository.findById(Long.valueOf(String.valueOf(id)))
-                .orElseThrow(() -> new RuntimeException("Video not found"));
+            Path path = Paths.get(video.getFilePath());
+            Resource resource = new UrlResource(path.toUri());
 
-        // 如果数据库中没有路径，就自动补上
-        //Si no hay una ruta en la base de datos, se añade automáticamente
-        if (v.getPath() == null || v.getPath().isEmpty()) {
-            if (v.getFileName() != null && !v.getFileName().isEmpty()) {
-                v.setPath(videoDir + "/" + v.getFileName());
-            } else {
-                v.setPath(videoDir + "/" + id + ".mp4");
+            if (!resource.exists()) {
+                throw new RuntimeException("Video file not found");
             }
+
+            return resource; // Devuelve solo el Resource, sin ResponseEntity
+        } catch (Exception e) {
+            throw new RuntimeException("Error al obtener recurso de video", e);
         }
-        return v;
-    }
-    public String getThumbnailById(Long id){
-        Video v=  videoRepository.findById(Long.valueOf(String.valueOf(id))).orElseThrow(()->new RuntimeException("Video not found"));
-        if(v.getPath()==null||v.getPath().isEmpty()){
-            if(v.getFileName()!=null&&!v.getFileName().isEmpty()){
-                return videoDir+"/"+v.getFileName()+".png";
-            }else{
-                return videoDir+"/"+id+".png";
-            }
-        }
-        return v.getPath().replace(".mp4", ".webp");
     }
 
-    public Video saveVideo(Video video){
-        videoRepository.save(video);
-        return video;
+    public Resource getVideoThumbnail(Long id){
+        try {
+            Video video = videoRepository.findById(id)
+                    .orElseThrow(()->new RuntimeException("Video not found"));
+
+            Path thumbnailPath = Paths.get(video.getThumbnailPath());
+
+            Resource resource = new UrlResource(thumbnailPath.toUri());
+
+            if (!resource.exists()) {
+                throw new RuntimeException("Thumbnail not found");
+            }
+
+            return resource;
+
+        } catch (Exception e) {
+            throw new RuntimeException("Error while obtaining thumbnail", e);
+        }
     }
+
+    public List<Video> getVideosByUser(String username){
+        return videoRepository.findByUser(username);
+    }
+
+    public Video uploadVideo(MultipartFile file, String title, String description,
+                             MultipartFile thumbnail, String username, List<String> tags,
+                             List<String> categories) {
+        try {
+            String videoFilename = System.currentTimeMillis() + "_" + file.getOriginalFilename();
+            Path videoPath = Paths.get(videosDir, videoFilename);
+            Files.createDirectories(videoPath.getParent());
+            Files.copy(file.getInputStream(), videoPath, StandardCopyOption.REPLACE_EXISTING);
+
+            String thumbnailFilename = System.currentTimeMillis() + ".webp";
+            Path thumbnailPath = Paths.get(thumbnailsDir, thumbnailFilename);
+            Files.createDirectories(thumbnailPath.getParent());
+
+            Files.copy(thumbnail.getInputStream(), thumbnailPath, StandardCopyOption.REPLACE_EXISTING);
+
+            VideoMeta meta = new VideoMeta();
+            meta.setDescription(description);
+            meta.setTags(tags != null ? tags : new ArrayList<>());
+            meta.setCategories(categories != null ? categories : new ArrayList<>());
+            meta.setComments(new ArrayList<>());
+
+            Video video = new Video();
+            video.setTitle(title);
+            video.setFilePath(videoPath.toString());
+            video.setThumbnailPath(thumbnailPath.toString());
+            video.setUser(username);
+            video.setMeta(meta);
+
+            return videoRepository.save(video);
+
+        } catch (Exception e){
+            throw new RuntimeException("Error while saving video", e);
+        }
+    }
+
+    public Video addComment(Long videoId, Comment comment) {
+        Video video = videoRepository.findById(videoId)
+                .orElseThrow(() -> new RuntimeException("Video no encontrado"));
+
+        if (video.getMeta() == null) {
+            video.setMeta(new VideoMeta());
+            video.getMeta().setComments(new ArrayList<>());
+        }
+
+        video.getMeta().getComments().add(comment);
+
+        return videoRepository.save(video);
+    }
+
     public Video reactLike(Long videoId, String username) {
         Video video = videoRepository.findById(videoId).orElse(null);
         if (video == null)
@@ -66,16 +144,13 @@ public class VideoService {
         String evaluacion = video.getReaction(username);
 
         if (evaluacion != null && evaluacion.equals("like")) {
-            // 如果之前已经点赞过，再次点击取消点赞
             video.setLikeCount(video.getLikeCount() - 1);
             video.getReaction().remove(username);
         } else if (evaluacion != null && evaluacion.equals("dislike")) {
-            // 原来是点踩 -> 变成点赞
             video.setDislikeCount(video.getDislikeCount() - 1);
             video.setLikeCount(video.getLikeCount() + 1);
             video.getReaction().put(username, "like");
         } else {
-            // 没有反应 -> 点赞
             video.setLikeCount(video.getLikeCount() + 1);
             video.getReaction().put(username, "like");
         }
@@ -90,26 +165,21 @@ public class VideoService {
         String evaluacion = video.getReaction().get(username);
 
         if (evaluacion != null && evaluacion.equals("dislike")) {
-            // 之前点踩 → 点击取消点踩
             video.setDislikeCount(video.getDislikeCount() - 1);
             video.getReaction().remove(username);
 
         } else if (evaluacion != null && evaluacion.equals("like")) {
-            // 之前点赞 → 变成点踩
             video.setLikeCount(video.getLikeCount() - 1);
             video.setDislikeCount(video.getDislikeCount() + 1);
             video.getReaction().put(username, "dislike");
 
         } else {
-            // 之前没有反应 → 点踩
             video.setDislikeCount(video.getDislikeCount() + 1);
             video.getReaction().put(username, "dislike");
         }
         videoRepository.save(video);
         return video;
     }
-
-
 }
 
 
