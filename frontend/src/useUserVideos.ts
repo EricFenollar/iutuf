@@ -27,7 +27,7 @@ export function useUserVideos(username: string) {
       }
     };
 
-    getVideos().then()
+    getVideos().then();
   }, [username]);
 
   return { value, message, loading };
