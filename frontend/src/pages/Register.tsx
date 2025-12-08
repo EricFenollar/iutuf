@@ -4,12 +4,10 @@ import { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { getEnv } from '../utils/Env';
 import { useTheme } from '../context/AppTheme';
-//import { useTranslation } from 'react-i18next';
 
 const REGISTER_URL = `${getEnv().API_BASE_URL}/api/auth/register`;
 
 function Register() {
-  //const { t } = useTranslation();
   const { login } = useAuth();
   const { theme, toggleTheme } = useTheme();
 
@@ -22,6 +20,13 @@ function Register() {
 
   const handleRegister = async (e) => {
     e.preventDefault();
+
+    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!regex.test(email)) {
+      alert('Invalid email');
+      return;
+    }
 
     if (password !== passwordConfirm) {
       alert('Password mismatch');

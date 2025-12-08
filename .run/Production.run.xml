@@ -8,9 +8,9 @@
           <option name="environmentProperties">
             <map>
               <entry key="ENV_PROTUBE_DELETE_PREVIOUS_DATA" value="true" />
-              <entry key="ENV_PROTUBE_INITIAL_VIDEOS_DIR" value="C:\Users\ericf\Desktop\videos" />
+              <entry key="ENV_PROTUBE_INITIAL_VIDEOS_DIR" value="C:\Users\ericf\Desktop\git\iutuf\storage\initial_videos" />
               <entry key="ENV_PROTUBE_LOAD_INITIAL_DATA" value="true" />
-              <entry key="ENV_PROTUBE_STORE_DIR" value="C:\Users\ericf\Desktop\storage" />
+              <entry key="ENV_PROTUBE_STORE_DIR" value="C:\Users\ericf\Desktop\git\iutuf\storage\data_base" />
             </map>
           </option>
           <option name="jreName" value="#USE_PROJECT_JDK" />

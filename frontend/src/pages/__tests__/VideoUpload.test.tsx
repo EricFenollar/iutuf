@@ -139,8 +139,12 @@ describe('VideoUpload Component', () => {
     );
 
     fireEvent.change(screen.getByTestId('title-input'), { target: { value: 'Video Fail' } });
+
     const videoFile = new File(['...'], 'video.mp4', { type: 'video/mp4' });
     fireEvent.change(screen.getByTestId('video-input'), { target: { files: [videoFile] } });
+
+    const thumbFile = new File(['(img)'], 'thumb.jpg', { type: 'image/jpeg' });
+    fireEvent.change(screen.getByTestId('thumb-input'), { target: { files: [thumbFile] } });
 
     fireEvent.click(screen.getByTestId('upload-btn'));
 
@@ -159,8 +163,12 @@ describe('VideoUpload Component', () => {
     );
 
     fireEvent.change(screen.getByTestId('title-input'), { target: { value: 'Video Net Fail' } });
+
     const videoFile = new File(['...'], 'video.mp4', { type: 'video/mp4' });
     fireEvent.change(screen.getByTestId('video-input'), { target: { files: [videoFile] } });
+
+    const thumbFile = new File(['(img)'], 'thumb.jpg', { type: 'image/jpeg' });
+    fireEvent.change(screen.getByTestId('thumb-input'), { target: { files: [thumbFile] } });
 
     fireEvent.click(screen.getByTestId('upload-btn'));
 

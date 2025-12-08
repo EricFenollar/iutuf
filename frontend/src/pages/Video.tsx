@@ -3,13 +3,11 @@ import { getEnv } from '../utils/Env';
 import { useEffect, useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import './Video.css';
-//import { useTranslation } from 'react-i18next';
 
 function Video() {
   const { id } = useParams();
   const navigate = useNavigate();
   const { username, isAuthenticated } = useAuth();
-  //const { t } = useTranslation();
 
   const [showFullDescription, setShowFullDescription] = useState(false);
   const [video, setVideo] = useState<any | null>(null);
@@ -20,13 +18,23 @@ function Video() {
     if (e.key !== 'Enter') return;
     if (!commentText.trim() || !isAuthenticated) return;
     try {
-      const response = await fetch(`${getEnv().API_BASE_URL}/api/videos/${id}/comments`, {
+      const response = await fetch(`${getEnv().API_BASE_URL}/api/videos/${id}/comment`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ text: commentText, author: username }),
       });
 
       if (!response.ok) throw new Error(await response.text());
+
+      const newComment = { text: commentText, author: username };
+
+      setVideo((prevVideo) => ({
+        ...prevVideo,
+        meta: {
+          ...prevVideo.meta,
+          comments: [...(prevVideo.meta?.comments || []), newComment],
+        },
+      }));
 
       setCommentText('');
     } catch (error: any) {
@@ -38,7 +46,7 @@ function Video() {
   useEffect(() => {
     if (!id) return;
 
-    fetch(`${getEnv().API_BASE_URL}/api/videos/${id}/info`)
+    fetch(`${getEnv().API_BASE_URL}/api/videos/${id}`)
       .then((res) => {
         if (!res.ok) throw new Error('Error getting video');
         return res.json();
@@ -101,9 +109,11 @@ function Video() {
 
         {/* Video Player */}
         <div className="video-container">
-          <video controls autoPlay style={{ width: '100%', height: '100%' }}>
-            <source src={`${getEnv().API_BASE_URL}/api/videos/${video.id}`} type="video/mp4" />
-          </video>
+          {video.id && (
+            <video controls autoPlay style={{ width: '100%', height: '100%' }}>
+              <source src={`${getEnv().API_BASE_URL}/api/videos/${video.id}/file`} type="video/mp4" />
+            </video>
+          )}
         </div>
 
         {/* Video Info + Comments */}
@@ -134,7 +144,7 @@ function Video() {
           {/* Description */}
           <div className="video-description">
             <div className={showFullDescription ? '' : 'description-collapsed'}>
-              <p>{video.meta.description || 'No description available.'}</p>
+              <p>{video.meta?.description || 'No description available.'}</p>
 
               {/* Category */}
               {(video.categories || video.meta?.categories) && (
@@ -154,7 +164,7 @@ function Video() {
               )}
             </div>
 
-            {video.meta.description?.split('\n').length > 3 && (
+            {video.meta?.description?.split('\n').length > 3 && (
               <button className="toggle-button" onClick={() => setShowFullDescription(!showFullDescription)}>
                 {showFullDescription ? 'Show less' : 'Show more'}
               </button>

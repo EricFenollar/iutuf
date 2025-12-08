@@ -5,8 +5,6 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/AppTheme';
-//import { useTranslation } from 'react-i18next';
-//import LanguageSwitcher from '../components/LanguageSwitcher';
 
 function Home() {
   const { loading, message, value: allVideos } = useAllVideos();
@@ -18,7 +16,6 @@ function Home() {
   const { username, isAuthenticated, logout } = useAuth();
 
   const { theme, toggleTheme } = useTheme();
-  //const { t } = useTranslation();
 
   useEffect(() => {
     if (loading === 'success' && allVideos) {
@@ -73,8 +70,8 @@ function Home() {
 
           {/* My Profile */}
           {isAuthenticated && (
-            <Link to={username ? `/profile/${username}` : '/profile'} className="login-link">
-              My Profile
+            <Link to={username ? `/upload` : '/profile'} className="login-link">
+              Upload
             </Link>
           )}
 

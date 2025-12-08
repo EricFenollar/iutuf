@@ -81,8 +81,12 @@ describe('Register Component', () => {
       </MemoryRouter>
     );
 
+    fireEvent.change(screen.getByPlaceholderText('Email'), { target: { value: 'test@valid.com' } });
+    fireEvent.change(screen.getByPlaceholderText('Username'), { target: { value: 'UserTest' } });
+
     fireEvent.change(screen.getByPlaceholderText('Password'), { target: { value: '1234' } });
     fireEvent.change(screen.getByPlaceholderText('Confirm password'), { target: { value: '5678' } });
+
     fireEvent.click(screen.getByRole('button', { name: 'Create account' }));
 
     expect(window.alert).toHaveBeenCalledWith('Password mismatch');
@@ -144,8 +148,10 @@ describe('Register Component', () => {
       </MemoryRouter>
     );
 
-    fireEvent.change(screen.getByPlaceholderText('Password'), { target: { value: 'a' } });
-    fireEvent.change(screen.getByPlaceholderText('Confirm password'), { target: { value: 'a' } });
+    fireEvent.change(screen.getByPlaceholderText('Email'), { target: { value: 'error@test.com' } });
+    fireEvent.change(screen.getByPlaceholderText('Username'), { target: { value: 'ErrorUser' } });
+    fireEvent.change(screen.getByPlaceholderText('Password'), { target: { value: 'pass123' } });
+    fireEvent.change(screen.getByPlaceholderText('Confirm password'), { target: { value: 'pass123' } });
 
     fireEvent.click(screen.getByRole('button', { name: 'Create account' }));
 

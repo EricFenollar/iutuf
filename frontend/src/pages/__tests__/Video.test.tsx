@@ -85,7 +85,7 @@ describe('Video Component', () => {
 
     // Video Player
     const source = document.querySelector('source');
-    expect(source).toHaveAttribute('src', 'http://api-test.com/api/videos/123');
+    expect(source).toHaveAttribute('src', 'http://api-test.com/api/videos/123/file');
   });
 
   test('Navigate back by pressing the close button (✖)', async () => {
@@ -169,10 +169,11 @@ describe('Video Component', () => {
     fireEvent.keyDown(input, { key: 'Enter', code: 'Enter', charCode: 13 });
 
     await waitFor(() => {
-      expect(global.fetch).toHaveBeenCalledWith(
-        expect.stringContaining('/comments'),
+      expect(global.fetch).toHaveBeenLastCalledWith(
+        expect.stringContaining('/comment'),
         expect.objectContaining({
           method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ text: 'My comment', author: 'TestUser' }),
         })
       );

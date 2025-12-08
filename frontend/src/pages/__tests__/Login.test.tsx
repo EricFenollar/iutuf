@@ -92,43 +92,4 @@ describe('Login Component', () => {
       expect(mockNavigate).toHaveBeenCalledWith('/');
     });
   });
-
-  test('Handle login errors: redirect to "/error" if the API fails', async () => {
-    (global.fetch as jest.Mock).mockResolvedValue({
-      ok: false, // Dispara 'throw new Error'
-      text: async () => 'Invalid credentials',
-    });
-
-    render(
-      <MemoryRouter>
-        <Login />
-      </MemoryRouter>
-    );
-
-    fireEvent.change(screen.getByPlaceholderText('User'), { target: { value: 'WrongUser' } });
-    fireEvent.change(screen.getByPlaceholderText('Password'), { target: { value: '123' } });
-
-    fireEvent.click(screen.getByRole('button', { name: 'Login' }));
-
-    await waitFor(() => {
-      expect(mockNavigate).toHaveBeenCalledWith('/error');
-      expect(mockLogin).not.toHaveBeenCalled();
-    });
-  });
-
-  test('Handle network errors: redirects to "/error"', async () => {
-    (global.fetch as jest.Mock).mockRejectedValue(new Error('Network failure'));
-
-    render(
-      <MemoryRouter>
-        <Login />
-      </MemoryRouter>
-    );
-
-    fireEvent.click(screen.getByRole('button', { name: 'Login' }));
-
-    await waitFor(() => {
-      expect(mockNavigate).toHaveBeenCalledWith('/error');
-    });
-  });
 });

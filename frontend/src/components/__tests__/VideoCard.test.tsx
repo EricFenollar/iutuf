@@ -38,7 +38,7 @@ describe('VideoCard Component', () => {
 
     const image = screen.getByRole('img');
     expect(image).toHaveAttribute('alt', mockVideo.title);
-    expect(image).toHaveAttribute('src', `http://localhost:8080/api/videos/thumbnail/${mockVideo.id}`);
+    expect(image).toHaveAttribute('src', `http://localhost:8080/api/videos/${mockVideo.id}/thumbnail`);
   });
 
   test('Navigate to the correct route by clicking on the card', () => {
