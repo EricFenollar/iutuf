@@ -48,7 +48,6 @@ public class AppStartupRunner implements ApplicationRunner {
 
     public AppStartupRunner(Environment env) {
         this.env = env;
-
     }
 
     @Override
