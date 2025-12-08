@@ -86,7 +86,7 @@ public class VideoController {
             @RequestParam("file") MultipartFile file,
             @RequestParam String title,
             @RequestParam(required = false) String description,
-            @RequestParam(required = false) MultipartFile thumbnail,
+            @RequestParam MultipartFile thumbnail,
             @RequestParam String username,
             @RequestParam(required = false) List<String> tags,
             @RequestParam(required = false) List<String> categories

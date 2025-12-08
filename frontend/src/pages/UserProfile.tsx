@@ -52,17 +52,13 @@ function UserProfile() {
         </div>
 
         <div className="header-right">
-          <Link to="/" className="login-link">
-            Home
-          </Link>
 
-          {isAuthenticated && (
-            <Link to={username == user ? `/upload` : '/profile'} className="login-link">
+          {(username === user) && (
+            <Link to={username === user ? `/upload` : '/profile'} className="login-link">
               Upload
             </Link>
           )}
 
-          <span className="login-link">My Profile</span>
           <Link to="/" className="login-link" onClick={logout}>
             Logout
           </Link>
@@ -80,7 +76,7 @@ function UserProfile() {
             {username === user ? "You haven't uploaded any videos yet." : `${username} hasn't uploaded any videos yet.`}
           </p>
         ) : (
-          <VideoGrid videos={videos} />
+          <VideoGrid videos={displayVideos} />
         )}
       </main>
     </div>

@@ -13,7 +13,9 @@ import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.Objects;
@@ -51,8 +53,42 @@ public class AppStartupRunner implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
-        Boolean loadInitialData = env.getProperty("pro_tube.load_initial_data", Boolean.class);
+        Boolean deletePreviousData = env.getProperty("pro_tube.delete_previous_data", Boolean.class);
+        if (deletePreviousData) {
+            String storageDir = env.getProperty("pro_tube.store.dir");
+            Path baseDir = Paths.get(storageDir);
 
+            if (!Files.exists(baseDir) || !Files.isDirectory(baseDir)) {
+                throw new RuntimeException("carpetaBase no es una carpeta: " + baseDir);
+            }
+            try {
+                if (Files.exists(baseDir)) {
+                    try (var stream = Files.walk(baseDir)) {
+                        stream.sorted((a, b) -> b.compareTo(a)) // hijos primero
+                                .forEach(path -> {
+                                    if (!path.equals(baseDir)) {
+                                        try {
+                                            Files.delete(path);
+                                        } catch (IOException e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+                                });
+                    }
+                }
+                Path files = baseDir.resolve("files");
+                Path thumbnails = baseDir.resolve("thumbnails");
+
+                Files.createDirectories(files);
+                Files.createDirectories(thumbnails);
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+
+        Boolean loadInitialData = env.getProperty("pro_tube.load_initial_data", Boolean.class);
         if (loadInitialData == null || !loadInitialData) {
             LOG.info("⏭ Importación inicial desactivada.");
             return;

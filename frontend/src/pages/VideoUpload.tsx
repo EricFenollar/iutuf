@@ -35,6 +35,7 @@ function VideoUpload() {
 
     if (!file) return setError('Please select a video file.');
     if (!title.trim()) return setError('Please enter a title.');
+    if (!thumbnail) return setError('Please select a thumbnail.');
 
     setUploading(true);
     setProgress(0);

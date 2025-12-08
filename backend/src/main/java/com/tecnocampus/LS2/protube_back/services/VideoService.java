@@ -12,8 +12,10 @@ import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -103,11 +105,7 @@ public class VideoService {
             Path thumbnailPath = Paths.get(thumbnailsDir, thumbnailFilename);
             Files.createDirectories(thumbnailPath.getParent());
 
-            if (thumbnail != null) {
-                Files.copy(thumbnail.getInputStream(), thumbnailPath, StandardCopyOption.REPLACE_EXISTING);
-            } else {
-                extractThumbnailFromVideo(videoPath, thumbnailPath);
-            }
+            Files.copy(thumbnail.getInputStream(), thumbnailPath, StandardCopyOption.REPLACE_EXISTING);
 
             VideoMeta meta = new VideoMeta();
             meta.setDescription(description);
@@ -119,28 +117,13 @@ public class VideoService {
             video.setTitle(title);
             video.setFilePath(videoPath.toString());
             video.setThumbnailPath(thumbnailPath.toString());
-            video.setUser(username); // solo el nombre de usuario
+            video.setUser(username);
             video.setMeta(meta);
 
             return videoRepository.save(video);
 
         } catch (Exception e){
             throw new RuntimeException("Error while saving video", e);
-        }
-    }
-
-    private void extractThumbnailFromVideo(Path videoPath, Path thumbnailPath) {
-        try {
-            String[] command = {
-                    "ffmpeg",
-                    "-i", videoPath.toString(),
-                    "-ss", "00:00:01",
-                    "-vframes", "1",
-                    thumbnailPath.toString()
-            };
-            new ProcessBuilder(command).inheritIO().start().waitFor();
-        } catch (Exception e) {
-            throw new RuntimeException("Error al generar thumbnail", e);
         }
     }
 
