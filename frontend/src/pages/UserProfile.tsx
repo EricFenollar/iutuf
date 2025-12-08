@@ -37,44 +37,44 @@ function UserProfile() {
   if (loading === 'loading') return <div>Loading...</div>;
   if (loading === 'error')
     return (
-      <div>
-        <h3>Error</h3>
-        <p>{message}</p>
-      </div>
+        <div>
+          <h3>Error</h3>
+          <p>{message}</p>
+        </div>
     );
 
   return (
-    <div className="App">
-      {/* HEADER */}
-      <header className="App-header">
-        <div className="header-left">
-          <Link to="/">
-            <img src="/protube-logo-removebg-preview.png" className="App-logo" alt="logo" />
-          </Link>
-          <h1 className="app-name">ProTube</h1>
-        </div>
-
-        <div className="header-right">
-          <Link to="/" className="login-link">
-            Home
-          </Link>
-
-          {isAuthenticated && (
-            <Link to={username == user ? `/upload` : '/profile'} className="login-link">
-              Upload
+      <div className="App">
+        {/* HEADER */}
+        <header className="App-header">
+          <div className="header-left">
+            <Link to="/">
+              <img src="/protube-logo-removebg-preview.png" className="App-logo" alt="logo" />
             </Link>
-          )}
+            <h1 className="app-name">ProTube</h1>
+          </div>
 
-          <span className="login-link">My Profile</span>
-          <Link to="/" className="login-link" onClick={logout}>
-            Logout
-          </Link>
-        </div>
-      </header>
+          <div className="header-right">
+            <Link to="/" className="login-link">
+              Home
+            </Link>
 
-      {/* CONTENT */}
-      <main className="profile-content">
-        <h2>{username === user ? 'Your Videos' : `${username}'s Videos`}</h2>
+            {isAuthenticated && (
+                <Link to={username == user ? `/upload` : '/profile'} className="login-link">
+                  Upload
+                </Link>
+            )}
+
+            <span className="login-link">My Profile</span>
+            <Link to="/" className="login-link" onClick={logout}>
+              Logout
+            </Link>
+          </div>
+        </header>
+
+        {/* CONTENT */}
+        <main className="profile-content">
+          <h2>{username === user ? 'Your Videos' : `${username}'s Videos`}</h2>
 
         {loading === 'loading' ? (
           <p>Loading...</p>

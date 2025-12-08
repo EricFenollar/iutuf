@@ -82,72 +82,72 @@ function VideoUpload() {
   };
 
   return (
-    <div className="upload-page">
-      {/* Añadido: noValidate para que React gestione los errores */}
-      <form className="upload-container" onSubmit={handleUpload} noValidate>
-        <h2>Upload Video</h2>
+      <div className="upload-page">
+        {/* Añadido: noValidate para que React gestione los errores */}
+        <form className="upload-container" onSubmit={handleUpload} noValidate>
+          <h2>Upload Video</h2>
 
-        {error && <div className="upload-message error">{error}</div>}
-        {message && <div className="upload-message success">{message}</div>}
+          {error && <div className="upload-message error">{error}</div>}
+          {message && <div className="upload-message success">{message}</div>}
 
-        {uploading && (
-          <div className="progress-wrapper">
-            <div className="progress-container">
-              <div className="progress-bar" style={{ width: `${progress}%` }} />
-            </div>
-            <span className="progress-text">{progress}%</span>
+          {uploading && (
+              <div className="progress-wrapper">
+                <div className="progress-container">
+                  <div className="progress-bar" style={{ width: `${progress}%` }} />
+                </div>
+                <span className="progress-text">{progress}%</span>
+              </div>
+          )}
+
+          <input
+              data-testid="title-input"
+              type="text"
+              placeholder="Title"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              disabled={uploading}
+              // required
+          />
+
+          <textarea
+              data-testid="desc-input"
+              placeholder="Description"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              disabled={uploading}
+              // required
+          />
+
+          <div className="file-input-group">
+            <label htmlFor="video-file">Video File:</label>
+            <input
+                data-testid="video-input"
+                id="video-file"
+                type="file"
+                accept="video/*"
+                onChange={(e) => setFile(e.target.files?.[0] || null)}
+                disabled={uploading}
+                // required
+            />
           </div>
-        )}
 
-        <input
-          data-testid="title-input"
-          type="text"
-          placeholder="Title"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          disabled={uploading}
-          // required
-        />
+          <div className="file-input-group">
+            <label htmlFor="thumbnail-file">Thumbnail (Optional):</label>
+            <input
+                data-testid="thumb-input"
+                id="thumbnail-file"
+                type="file"
+                accept="image/*"
+                onChange={(e) => setThumbnail(e.target.files?.[0] || null)}
+                disabled={uploading}
+            />
+          </div>
 
-        <textarea
-          data-testid="desc-input"
-          placeholder="Description"
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-          disabled={uploading}
-          // required
-        />
-
-        <div className="file-input-group">
-          <label htmlFor="video-file">Video File:</label>
-          <input
-            data-testid="video-input"
-            id="video-file"
-            type="file"
-            accept="video/*"
-            onChange={(e) => setFile(e.target.files?.[0] || null)}
-            disabled={uploading}
-            // required
-          />
-        </div>
-
-        <div className="file-input-group">
-          <label htmlFor="thumbnail-file">Thumbnail (Optional):</label>
-          <input
-            data-testid="thumb-input"
-            id="thumbnail-file"
-            type="file"
-            accept="image/*"
-            onChange={(e) => setThumbnail(e.target.files?.[0] || null)}
-            disabled={uploading}
-          />
-        </div>
-
-        <button type="submit" disabled={uploading} data-testid="upload-btn">
-          {uploading ? 'Uploading...' : 'Upload'}
-        </button>
-      </form>
-    </div>
+          <button type="submit" disabled={uploading} data-testid="upload-btn">
+            {uploading ? 'Uploading...' : 'Upload'}
+          </button>
+        </form>
+      </div>
   );
 }
 
