@@ -76,7 +76,7 @@ function UserProfile() {
       <main className="profile-content">
         <h2>{username === user ? 'Your Videos' : `${username}'s Videos`}</h2>
 
-        {loading ? (
+        {loading === 'loading' ? (
           <p>Loading...</p>
         ) : videos.length === 0 ? (
           <p>
