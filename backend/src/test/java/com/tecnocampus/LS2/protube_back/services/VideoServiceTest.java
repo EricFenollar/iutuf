@@ -175,7 +175,9 @@ class VideoServiceTest {
         when(videoRepository.findById(1L)).thenReturn(Optional.of(video));
         when(videoRepository.save(video)).thenReturn(video);
 
-        Comment comment = new Comment("user", "Nice!");
+        Comment comment = new Comment();
+        comment.setAuthor("user");
+        comment.setText("Nice");
 
         Video updated = videoService.addComment(1L, comment);
 
