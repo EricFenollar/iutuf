@@ -92,7 +92,7 @@ describe('Home Component', () => {
     );
 
     expect(screen.getByText('Title 1')).toBeInTheDocument();
-    expect(screen.getByText('Title 2')).toBeInTheDocument();
+    expect(screen.getByText('Tutorial 2')).toBeInTheDocument();
     expect(screen.getByText('Sample 3')).toBeInTheDocument();
   });
 
