@@ -20,7 +20,7 @@ function Video() {
     if (e.key !== 'Enter') return;
     if (!commentText.trim() || !isAuthenticated) return;
     try {
-      const response = await fetch(`${getEnv().API_BASE_URL}/api/videos/${id}/comments`, {
+      const response = await fetch(`${getEnv().API_BASE_URL}/api/videos/${id}/comment`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ text: commentText, author: username }),
@@ -38,7 +38,7 @@ function Video() {
   useEffect(() => {
     if (!id) return;
 
-    fetch(`${getEnv().API_BASE_URL}/api/videos/${id}/info`)
+    fetch(`${getEnv().API_BASE_URL}/api/videos/${id}`)
       .then((res) => {
         if (!res.ok) throw new Error('Error getting video');
         return res.json();
@@ -102,7 +102,7 @@ function Video() {
         {/* Video Player */}
         <div className="video-container">
           <video controls autoPlay style={{ width: '100%', height: '100%' }}>
-            <source src={`${getEnv().API_BASE_URL}/api/videos/${video.id}`} type="video/mp4" />
+            <source src={`${getEnv().API_BASE_URL}/api/videos/${video.id}/file`} type="video/mp4" />
           </video>
         </div>
 
