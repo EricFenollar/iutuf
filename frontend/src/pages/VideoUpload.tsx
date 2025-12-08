@@ -20,7 +20,7 @@ function VideoUpload() {
   const { username, token, isAuthenticated } = useAuth();
 
   useEffect(() => {
-    if (isAuthenticated == false) {
+    if (isAuthenticated === false) {
       navigate('/login');
     }
   }, [token, isAuthenticated, navigate]);
@@ -84,7 +84,8 @@ function VideoUpload() {
 
   return (
     <div className="upload-page">
-      <form className="upload-container" onSubmit={handleUpload}>
+      {/* Añadido: noValidate para que React gestione los errores */}
+      <form className="upload-container" onSubmit={handleUpload} noValidate>
         <h2>Upload Video</h2>
 
         {error && <div className="upload-message error">{error}</div>}
@@ -100,36 +101,42 @@ function VideoUpload() {
         )}
 
         <input
+          data-testid="title-input"
           type="text"
           placeholder="Title"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           disabled={uploading}
-          required
+          // required
         />
 
         <textarea
+          data-testid="desc-input"
           placeholder="Description"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
           disabled={uploading}
-          required
+          // required
         />
 
         <div className="file-input-group">
-          <label>Video File:</label>
+          <label htmlFor="video-file">Video File:</label>
           <input
+            data-testid="video-input"
+            id="video-file"
             type="file"
             accept="video/*"
             onChange={(e) => setFile(e.target.files?.[0] || null)}
             disabled={uploading}
-            required
+            // required
           />
         </div>
 
         <div className="file-input-group">
-          <label>Thumbnail (Optional):</label>
+          <label htmlFor="thumbnail-file">Thumbnail (Optional):</label>
           <input
+            data-testid="thumb-input"
+            id="thumbnail-file"
             type="file"
             accept="image/*"
             onChange={(e) => setThumbnail(e.target.files?.[0] || null)}
@@ -137,7 +144,7 @@ function VideoUpload() {
           />
         </div>
 
-        <button type="submit" disabled={uploading}>
+        <button type="submit" disabled={uploading} data-testid="upload-btn">
           {uploading ? 'Uploading...' : 'Upload'}
         </button>
       </form>
