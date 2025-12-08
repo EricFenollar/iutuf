@@ -1,6 +1,5 @@
 package com.tecnocampus.LS2.protube_back.services;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tecnocampus.LS2.protube_back.persistence.Comment;
 import com.tecnocampus.LS2.protube_back.persistence.Video;
 import com.tecnocampus.LS2.protube_back.persistence.VideoMeta;
@@ -12,10 +11,6 @@ import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -29,13 +24,13 @@ public class VideoService {
     private final VideoRepository videoRepository;
 
     @Autowired
-    private UserService userService;
+    UserService userService;
 
     @Value("${pro_tube.videos.dir}")
-    private String videosDir;
+    String videosDir;
 
     @Value("${pro_tube.thumbnails.dir}")
-    private String thumbnailsDir;
+    String thumbnailsDir;
 
     public VideoService(VideoRepository videoRepository) {
         this.videoRepository = videoRepository;
@@ -185,75 +180,6 @@ public class VideoService {
         videoRepository.save(video);
         return video;
     }
-
-    /*public void importInitialVideos(String initialVideosDir){
-        File folder = new File(initialVideosDir);
-
-        if (!folder.exists()) {
-            System.out.println("❌ initial_videos no existe, nada que importar.");
-            return;
-        }
-
-        File[] files = folder.listFiles((dir, name) -> name.endsWith(".mp4"));
-        if (files == null) return;
-
-        for (File videoFile : files) {
-            try {
-                String baseName = videoFile.getName().replace(".mp4", "");
-
-                File metaFile = new File(folder, baseName + ".json");
-                File thumbFile = new File(folder, baseName + ".webp");
-
-                if (!metaFile.exists()) {
-                    System.out.println("⚠️ Falta metadata para " + baseName);
-                    continue;
-                }
-
-                // Leer metadata
-                ObjectMapper mapper = new ObjectMapper();
-                VideoMeta meta = mapper.readValue(metaFile, VideoMeta.class);
-
-                // Crear usuario si no existe
-                String username = meta.get();
-                userService.createUserIfNotExists(username);
-
-                // Generar nuevo nombre aleatorio
-                String newVideoName = UUID.randomUUID().toString() + ".mp4";
-                String newThumbName = UUID.randomUUID().toString() + ".webp";
-
-                // Copiar archivos al directorio final
-                Path newVideoPath = Paths.get(videosDir, newVideoName);
-                Path newThumbPath = Paths.get(thumbnailsDir, newThumbName);
-
-                Files.copy(videoFile.toPath(), newVideoPath, StandardCopyOption.REPLACE_EXISTING);
-
-                if (thumbFile.exists()) {
-                    Files.copy(thumbFile.toPath(), newThumbPath, StandardCopyOption.REPLACE_EXISTING);
-                }
-
-                // Crear entidad Video
-                Video video = new Video();
-                video.setUser(username);
-                video.setTitle(meta.getTitle());
-                video.setDescription(meta.getDescription());
-                video.setVideoPath(newVideoPath.toString());
-                video.setThumbnailPath(newThumbPath.toString());
-                video.setMeta(meta);
-
-                videoRepository.save(video);
-
-                System.out.println("✅ Video importado: " + video.getTitle());
-
-            } catch (Exception e) {
-                System.out.println("❌ Error importando video: " + e.getMessage());
-            }
-        }
-    }
-
-    private String getBaseName(String filename) {
-        int dotIndex = filename.lastIndexOf('.');
-        return dotIndex == -1 ? filename : filename.substring(0, dotIndex);
-    }*/
 }
 
 
