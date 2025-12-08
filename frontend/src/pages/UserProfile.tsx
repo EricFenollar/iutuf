@@ -76,17 +76,17 @@ function UserProfile() {
         <main className="profile-content">
           <h2>{username === user ? 'Your Videos' : `${username}'s Videos`}</h2>
 
-          {loading === 'loading' ? (
-              <p>Loading...</p>
-          ) : videos.length === 0 ? (
-              <p>
-                {username === user ? "You haven't uploaded any videos yet." : `${username} hasn't uploaded any videos yet.`}
-              </p>
-          ) : (
-              <VideoGrid videos={videos} />
-          )}
-        </main>
-      </div>
+        {loading === 'loading' ? (
+          <p>Loading...</p>
+        ) : videos.length === 0 ? (
+          <p>
+            {username === user ? "You haven't uploaded any videos yet." : `${username} hasn't uploaded any videos yet.`}
+          </p>
+        ) : (
+          <VideoGrid videos={videos} />
+        )}
+      </main>
+    </div>
   );
 }
 
