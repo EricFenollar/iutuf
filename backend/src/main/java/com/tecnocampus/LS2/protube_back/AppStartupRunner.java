@@ -31,8 +31,6 @@ public class AppStartupRunner implements ApplicationRunner {
     @Autowired
     private VideoRepository videoRepository;
 
-
-
     private final ObjectMapper mapper = new ObjectMapper();
 
     @Autowired
