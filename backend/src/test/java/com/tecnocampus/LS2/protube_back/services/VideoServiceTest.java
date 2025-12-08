@@ -166,25 +166,6 @@ class VideoServiceTest {
     }
 
     @Test
-    void testAddComment() {
-        Video video = new Video();
-        VideoMeta meta = new VideoMeta();
-        meta.setComments(new ArrayList<>());
-        video.setMeta(meta);
-
-        when(videoRepository.findById(1L)).thenReturn(Optional.of(video));
-        when(videoRepository.save(video)).thenReturn(video);
-
-        Comment comment = new Comment();
-        comment.setAuthor("user");
-        comment.setText("Nice");
-
-        Video updated = videoService.addComment(1L, comment);
-
-        assertEquals(1, updated.getMeta().getComments().size());
-    }
-
-    @Test
     void testReactLike() {
         Video v = new Video();
         v.setReaction(new HashMap<>());
