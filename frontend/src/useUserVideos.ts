@@ -9,13 +9,13 @@ export function useUserVideos(username: string) {
   const [message, setMessage] = useState<string>('Loading...');
   const [loading, setLoading] = useState<LoadingState>('idle');
 
-  const BASE_URL = `${getEnv().API_BASE_URL}/api/videos/user/${username}`;
+  const USER_VIDEOS_URL = `${getEnv().API_BASE_URL}/api/videos/user/${username}`;
 
   useEffect(() => {
     const getVideos = async () => {
       try {
         setLoading('loading');
-        const response = await axios.get<string[]>(BASE_URL);
+        const response = await axios.get<string[]>(USER_VIDEOS_URL);
 
         if (response.status === 200) {
           setValue(response.data);
@@ -27,9 +27,7 @@ export function useUserVideos(username: string) {
       }
     };
 
-    if (username) {
-      getVideos();
-    }
+    getVideos().then()
   }, [username]);
 
   return { value, message, loading };

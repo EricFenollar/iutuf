@@ -1,7 +1,7 @@
 package com.tecnocampus.LS2.protube_back.services;
 
 import com.tecnocampus.LS2.protube_back.persistence.Video;
-import com.tecnocampus.LS2.protube_back.repository.videoReposity;
+import com.tecnocampus.LS2.protube_back.repository.VideoRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -13,13 +13,13 @@ import static org.mockito.Mockito.*;
 
 class VideoServiceTest {
 
-    private videoReposity videoRepository;
+    private VideoRepository videoRepository;
     private VideoService videoService;
 
     @BeforeEach
     void setUp() {
         // 模拟数据库 repository
-        videoRepository = Mockito.mock(videoReposity.class);
+        videoRepository = Mockito.mock(VideoRepository.class);
         videoService = new VideoService(videoRepository);
     }
 

@@ -1,7 +1,6 @@
 import './UserProfile.css';
 import { useEffect, useState } from 'react';
 import { useAuth } from '../context/AuthContext';
-import { getEnv } from '../utils/Env';
 import VideoGrid from '../components/VideoGrid';
 import { Link, useParams } from 'react-router-dom';
 import { useUserVideos } from '../useUserVideos';
@@ -10,8 +9,7 @@ import { useTheme } from '../context/AppTheme';
 function UserProfile() {
   const { user, isAuthenticated, logout } = useAuth();
   const { username } = useParams();
-  const userId = username || user?.id;
-  const { value: videos, loading, message } = useUserVideos(userId);
+  const { value: videos, loading, message } = useUserVideos(username);
   const [displayVideos, setDisplayVideos] = useState<any[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
   const { theme, toggleTheme } = useTheme();
@@ -22,7 +20,6 @@ function UserProfile() {
     }
   }, [loading, videos]);
 
-  // 搜索功能
   useEffect(() => {
     if (!videos) return;
 

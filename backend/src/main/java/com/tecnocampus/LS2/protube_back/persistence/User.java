@@ -9,10 +9,7 @@ import jakarta.persistence.*;
 @Table(name="Users")
 public class User {
     @Id
-    private long id;
     private String username;
     private String password;
-
     private String email;
-
 }
