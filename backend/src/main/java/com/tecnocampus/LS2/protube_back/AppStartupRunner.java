@@ -27,6 +27,8 @@ public class AppStartupRunner implements ApplicationRunner {
             LoggerFactory.getLogger(AppStartupRunner.class);
 
     @Autowired
+    private VideoService videoService;
+    @Autowired
     private VideoRepository videoRepository;
 
 
