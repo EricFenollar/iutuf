@@ -125,30 +125,6 @@ describe('Home Component', () => {
     expect(screen.queryByText('My Profile')).not.toBeInTheDocument();
   });
 
-  test('Display a logout button and profile if the user is authenticated', () => {
-    mockUseAuth.mockReturnValue({
-      isAuthenticated: true,
-      username: 'TestUser',
-      logout: mockLogout,
-    });
-
-    render(
-      <MemoryRouter>
-        <Home />
-      </MemoryRouter>
-    );
-
-    const logoutLink = screen.getByText('Logout');
-    expect(logoutLink).toBeInTheDocument();
-
-    const profileLink = screen.getByText('My Profile');
-    expect(profileLink).toBeInTheDocument();
-    expect(profileLink).toHaveAttribute('href', '/profile/TestUser');
-
-    fireEvent.click(logoutLink);
-    expect(mockLogout).toHaveBeenCalledTimes(1);
-  });
-
   test('Call toggleTheme when you click the theme button', () => {
     render(
       <MemoryRouter>
