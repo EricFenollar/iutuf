@@ -27,8 +27,6 @@ public class AppStartupRunner implements ApplicationRunner {
             LoggerFactory.getLogger(AppStartupRunner.class);
 
     @Autowired
-    private VideoService videoService;
-    @Autowired
     private VideoRepository videoRepository;
 
 
@@ -48,7 +46,6 @@ public class AppStartupRunner implements ApplicationRunner {
 
     public AppStartupRunner(Environment env) {
         this.env = env;
-
     }
 
     @Override
@@ -57,7 +54,7 @@ public class AppStartupRunner implements ApplicationRunner {
         if (deletePreviousData) {
             String storageDir = env.getProperty("pro_tube.store.dir");
             Path baseDir = Paths.get(storageDir);
-            
+
             try {
                 if (Files.exists(baseDir)) {
                     try (var stream = Files.walk(baseDir)) {
