@@ -1,18 +1,13 @@
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { getEnv } from '../utils/Env';
-import { useState } from 'react';
 
 const VideoCard = ({ video }: { video: any }) => {
   const navigate = useNavigate();
 
-  const authorName = video.user || video.username;
-  const [isAuthorHovered, setIsAuthorHovered] = useState(false);
-
   return (
     <li key={video.id} style={{ width: '31%', minWidth: '280px', listStyle: 'none', marginBottom: '20px' }}>
       <div
-        className="card shadow-sm h-100 video-card-container"
-        // Lleva al video si clicas en cualquier parte de la tarjeta menos el nombre del autor
+        className="card shadow-sm h-100"
         onClick={() => navigate(`/video/${video.id}`)}
         style={{
           cursor: 'pointer',
@@ -25,7 +20,6 @@ const VideoCard = ({ video }: { video: any }) => {
         onMouseEnter={(e) => (e.currentTarget.style.transform = 'scale(1.03)')}
         onMouseLeave={(e) => (e.currentTarget.style.transform = 'scale(1)')}
       >
-        {/* IMAGEN THUMBNAIL */}
         <div
           style={{
             width: '100%',
@@ -52,8 +46,6 @@ const VideoCard = ({ video }: { video: any }) => {
             }}
           />
         </div>
-
-        {/* CONTENIDO TEXTO */}
         <div
           className="card-body text-center"
           style={{
@@ -74,7 +66,6 @@ const VideoCard = ({ video }: { video: any }) => {
           >
             {video.title}
           </h5>
-
           <p
             style={{
               margin: 0,
@@ -82,25 +73,8 @@ const VideoCard = ({ video }: { video: any }) => {
               fontSize: '0.9rem',
             }}
           >
-            Author:
-            <Link
-              to={`/profile/${authorName}`}
-              onMouseEnter={() => setIsAuthorHovered(true)}
-              onMouseLeave={() => setIsAuthorHovered(false)}
-              onClick={(e) => {
-                e.stopPropagation(); // Evita ir al video
-              }}
-              style={{
-                color: isAuthorHovered ? '#1e90ff' : 'var(--text-secondary)',
-                fontWeight: 'bold',
-                textDecoration: 'none',
-                zIndex: 10, // Asegura que esté encima para recibir el click
-                position: 'relative',
-                transition: 'color 0.2s ease',
-              }}
-            >
-              {authorName}
-            </Link>
+            {' '}
+            Author: {video.user || video.username}
           </p>
         </div>
       </div>
