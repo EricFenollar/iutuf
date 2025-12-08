@@ -57,10 +57,7 @@ public class AppStartupRunner implements ApplicationRunner {
         if (deletePreviousData) {
             String storageDir = env.getProperty("pro_tube.store.dir");
             Path baseDir = Paths.get(storageDir);
-
-            if (!Files.exists(baseDir) || !Files.isDirectory(baseDir)) {
-                throw new RuntimeException("carpetaBase no es una carpeta: " + baseDir);
-            }
+            
             try {
                 if (Files.exists(baseDir)) {
                     try (var stream = Files.walk(baseDir)) {
