@@ -3,6 +3,7 @@ Object.assign(global, { TextEncoder, TextDecoder });
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import VideoCard from '../VideoCard';
+import { MemoryRouter } from 'react-router-dom';
 
 const mockNavigate = jest.fn();
 jest.mock('react-router-dom', () => ({
@@ -28,9 +29,11 @@ describe('VideoCard Component', () => {
 
   test('Render video cover, title and author correctly', () => {
     render(
-      <ul>
-        <VideoCard video={mockVideo} />
-      </ul>
+      <MemoryRouter>
+        <ul>
+          <VideoCard video={mockVideo} />
+        </ul>
+      </MemoryRouter>
     );
 
     expect(screen.getByText('Test title')).toBeInTheDocument();
@@ -43,9 +46,11 @@ describe('VideoCard Component', () => {
 
   test('Navigate to the correct route by clicking on the card', () => {
     render(
-      <ul>
-        <VideoCard video={mockVideo} />
-      </ul>
+      <MemoryRouter>
+        <ul>
+          <VideoCard video={mockVideo} />
+        </ul>
+      </MemoryRouter>
     );
 
     const card = screen.getByRole('img').closest('.card');
@@ -59,9 +64,11 @@ describe('VideoCard Component', () => {
 
   test('Use the default image if the image fails', () => {
     render(
-      <ul>
-        <VideoCard video={mockVideo} />
-      </ul>
+      <MemoryRouter>
+        <ul>
+          <VideoCard video={mockVideo} />
+        </ul>
+      </MemoryRouter>
     );
 
     const image = screen.getByRole('img');
@@ -74,9 +81,11 @@ describe('VideoCard Component', () => {
     const videoWithUsername = { ...mockVideo, user: null, username: 'OtherUser' };
 
     render(
-      <ul>
-        <VideoCard video={videoWithUsername} />
-      </ul>
+      <MemoryRouter>
+        <ul>
+          <VideoCard video={videoWithUsername} />
+        </ul>
+      </MemoryRouter>
     );
 
     expect(screen.getByText(/Author: OtherUser/i)).toBeInTheDocument();
@@ -84,9 +93,11 @@ describe('VideoCard Component', () => {
 
   test('', () => {
     render(
-      <ul>
-        <VideoCard video={mockVideo} />
-      </ul>
+      <MemoryRouter>
+        <ul>
+          <VideoCard video={mockVideo} />
+        </ul>
+      </MemoryRouter>
     );
 
     const card = screen.getByRole('img').closest('.card');
