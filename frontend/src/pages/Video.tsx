@@ -26,6 +26,16 @@ function Video() {
 
       if (!response.ok) throw new Error(await response.text());
 
+      const newComment = { text: commentText, author: username };
+
+      setVideo((prevVideo) => ({
+        ...prevVideo,
+        meta: {
+          ...prevVideo.meta,
+          comments: [...(prevVideo.meta?.comments || []), newComment],
+        },
+      }));
+
       setCommentText('');
     } catch (error: any) {
       alert(error.message);
@@ -99,9 +109,11 @@ function Video() {
 
         {/* Video Player */}
         <div className="video-container">
-          <video controls autoPlay style={{ width: '100%', height: '100%' }}>
-            <source src={`${getEnv().API_BASE_URL}/api/videos/${video.id}/file`} type="video/mp4" />
-          </video>
+          {video.id && (
+            <video controls autoPlay style={{ width: '100%', height: '100%' }}>
+              <source src={`${getEnv().API_BASE_URL}/api/videos/${video.id}/file`} type="video/mp4" />
+            </video>
+          )}
         </div>
 
         {/* Video Info + Comments */}
@@ -132,7 +144,7 @@ function Video() {
           {/* Description */}
           <div className="video-description">
             <div className={showFullDescription ? '' : 'description-collapsed'}>
-              <p>{video.meta.description || 'No description available.'}</p>
+              <p>{video.meta?.description || 'No description available.'}</p>
 
               {/* Category */}
               {(video.categories || video.meta?.categories) && (
@@ -152,7 +164,7 @@ function Video() {
               )}
             </div>
 
-            {video.meta.description?.split('\n').length > 3 && (
+            {video.meta?.description?.split('\n').length > 3 && (
               <button className="toggle-button" onClick={() => setShowFullDescription(!showFullDescription)}>
                 {showFullDescription ? 'Show less' : 'Show more'}
               </button>
