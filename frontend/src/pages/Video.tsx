@@ -15,11 +15,12 @@ function Video() {
   const [video, setVideo] = useState<any | null>(null);
   const [commentText, setCommentText] = useState('');
 
+  // ---- FIXED: 不再递归调用 comment() ----
   const handleComment = async (e) => {
     if (e.key !== 'Enter') return;
     if (!commentText.trim() || !isAuthenticated) return;
     try {
-      const response = await fetch(`${getEnv().API_BASE_URL}/api/videos/${id}/comment`, {
+      const response = await fetch(`${getEnv().API_BASE_URL}/api/videos/${id}/comments`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ text: commentText, author: username }),
@@ -33,21 +34,22 @@ function Video() {
     }
   };
 
+  // ---- 加载视频信息 ----
   useEffect(() => {
     if (!id) return;
 
-    fetch(`${getEnv().API_BASE_URL}/api/videos/${id}`)
-      .then((res) => {
-        if (!res.ok) throw new Error('Error getting video');
-        return res.json();
-      })
-      .then((data) => {
-        setVideo(data);
-        setLikes(data.likeCount ?? 0);
-        setDislikes(data.dislikeCount ?? 0);
-        setReaction(data.reaction ?? null);
-      })
-      .catch(console.error);
+    fetch(`${getEnv().API_BASE_URL}/api/videos/${id}/info`)
+        .then((res) => {
+          if (!res.ok) throw new Error('Error getting video');
+          return res.json();
+        })
+        .then((data) => {
+          setVideo(data);
+          setLikes(data.likeCount ?? 0);
+          setDislikes(data.dislikeCount ?? 0);
+          setReaction(data.reaction ?? null);
+        })
+        .catch(console.error);
   }, [id]);
 
   const [likes, setLikes] = useState(0);
@@ -91,104 +93,104 @@ function Video() {
   if (!video) return <p>Loading...</p>;
 
   return (
-    <div className="video-modal">
-      <div className="video-modal-content">
-        <button onClick={() => navigate(-1)} className="close-button">
-          ✖
-        </button>
+      <div className="video-modal">
+        <div className="video-modal-content">
+          <button onClick={() => navigate(-1)} className="close-button">
+            ✖
+          </button>
 
-        {/* Video Player */}
-        <div className="video-container">
-          <video controls autoPlay style={{ width: '100%', height: '100%' }}>
-            <source src={`${getEnv().API_BASE_URL}/api/videos/${video.id}/file`} type="video/mp4" />
-          </video>
-        </div>
-
-        {/* Video Info + Comments */}
-        <div className="comment-section">
-          <div className="video-info">
-            <h3 className="video-title">{video.title}</h3>
+          {/* Video Player */}
+          <div className="video-container">
+            <video controls autoPlay style={{ width: '100%', height: '100%' }}>
+              <source src={`${getEnv().API_BASE_URL}/api/videos/${video.id}`} type="video/mp4" />
+            </video>
           </div>
 
-          {/* Like / Dislike */}
-          <div className="action-buttons">
-            <button
-              onClick={handleLike}
-              className="like-dislike-btn"
-              style={{ color: userReaction === 'like' ? '#3ea6ff' : 'var(--text-primary)' }}
-            >
-              👍 {likes}
-            </button>
+          {/* Video Info + Comments */}
+          <div className="comment-section">
+            <div className="video-info">
+              <h3 className="video-title">{video.title}</h3>
+            </div>
 
-            <button
-              onClick={handleDislike}
-              className="like-dislike-btn"
-              style={{ color: userReaction === 'dislike' ? 'red' : 'var(--text-primary)' }}
-            >
-              👎 {dislikes}
-            </button>
-          </div>
+            {/* Like / Dislike */}
+            <div className="action-buttons">
+              <button
+                  onClick={handleLike}
+                  className="like-dislike-btn"
+                  style={{ color: userReaction === 'like' ? '#3ea6ff' : 'var(--text-primary)' }}
+              >
+                👍 {likes}
+              </button>
 
-          {/* Description */}
-          <div className="video-description">
-            <div className={showFullDescription ? '' : 'description-collapsed'}>
-              <p>{video.meta.description || 'No description available.'}</p>
+              <button
+                  onClick={handleDislike}
+                  className="like-dislike-btn"
+                  style={{ color: userReaction === 'dislike' ? 'red' : 'var(--text-primary)' }}
+              >
+                👎 {dislikes}
+              </button>
+            </div>
 
-              {/* Category */}
-              {(video.categories || video.meta?.categories) && (
-                <div className="video-category">
-                  <strong>Category:</strong> {video.categories || video.meta?.categories}
-                </div>
-              )}
+            {/* Description */}
+            <div className="video-description">
+              <div className={showFullDescription ? '' : 'description-collapsed'}>
+                <p>{video.meta.description || 'No description available.'}</p>
 
-              {video.meta?.tags?.length > 0 && (
-                <div className="tags-container">
-                  {video.meta.tags.map((tag: string, i: number) => (
-                    <span key={i} className="tag">
+                {/* Category */}
+                {(video.categories || video.meta?.categories) && (
+                    <div className="video-category">
+                      <strong>Category:</strong> {video.categories || video.meta?.categories}
+                    </div>
+                )}
+
+                {video.meta?.tags?.length > 0 && (
+                    <div className="tags-container">
+                      {video.meta.tags.map((tag: string, i: number) => (
+                          <span key={i} className="tag">
                       #{tag}
                     </span>
-                  ))}
-                </div>
+                      ))}
+                    </div>
+                )}
+              </div>
+
+              {video.meta.description?.split('\n').length > 3 && (
+                  <button className="toggle-button" onClick={() => setShowFullDescription(!showFullDescription)}>
+                    {showFullDescription ? 'Show less' : 'Show more'}
+                  </button>
               )}
             </div>
 
-            {video.meta.description?.split('\n').length > 3 && (
-              <button className="toggle-button" onClick={() => setShowFullDescription(!showFullDescription)}>
-                {showFullDescription ? 'Show less' : 'Show more'}
-              </button>
-            )}
-          </div>
+            {/* Comments */}
+            <div className="comment-title">{video.meta?.comments?.length || 0} Comments</div>
 
-          {/* Comments */}
-          <div className="comment-title">{video.meta?.comments?.length || 0} Comments</div>
+            <div className="comment-wrapper">
+              {isAuthenticated && (
+                  <input
+                      type="text"
+                      placeholder="Add a comment..."
+                      className="comment-input"
+                      value={commentText}
+                      onChange={(e) => setCommentText(e.target.value)}
+                      onKeyDown={handleComment}
+                  />
+              )}
 
-          <div className="comment-wrapper">
-            {isAuthenticated && (
-              <input
-                type="text"
-                placeholder="Add a comment..."
-                className="comment-input"
-                value={commentText}
-                onChange={(e) => setCommentText(e.target.value)}
-                onKeyDown={handleComment}
-              />
-            )}
-
-            {video.meta?.comments?.length ? (
-              video.meta.comments.map((c: any, i: number) => (
-                <div key={i} className="comment-item">
-                  <p>
-                    <strong>{c.author}:</strong> {c.text}
-                  </p>
-                </div>
-              ))
-            ) : (
-              <p className="no-comments-text"> No comments yet. </p>
-            )}
+              {video.meta?.comments?.length ? (
+                  video.meta.comments.map((c: any, i: number) => (
+                      <div key={i} className="comment-item">
+                        <p>
+                          <strong>{c.author}:</strong> {c.text}
+                        </p>
+                      </div>
+                  ))
+              ) : (
+                  <p className="no-comments-text"> No comments yet. </p>
+              )}
+            </div>
           </div>
         </div>
       </div>
-    </div>
   );
 }
 
