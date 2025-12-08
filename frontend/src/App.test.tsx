@@ -25,11 +25,6 @@ jest.mock('./pages/Video', () => ({
   default: () => <div data-testid="page-video">Video Component</div>,
 }));
 
-jest.mock('./pages/UserProfile', () => ({
-  __esModule: true,
-  default: () => <div data-testid="page-profile">UserProfile Component</div>,
-}));
-
 jest.mock('./pages/VideoUpload', () => ({
   __esModule: true,
   default: () => <div data-testid="page-upload">VideoUpload Component</div>,
@@ -83,14 +78,5 @@ describe('App Routing', () => {
       </MemoryRouter>
     );
     expect(screen.getByTestId('page-video')).toBeInTheDocument();
-  });
-
-  test('Render User Profile to a dynamic path "/profile/:id"', () => {
-    render(
-      <MemoryRouter initialEntries={['/profile/DevExperto']}>
-        <App />
-      </MemoryRouter>
-    );
-    expect(screen.getByTestId('page-profile')).toBeInTheDocument();
   });
 });

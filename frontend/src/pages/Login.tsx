@@ -26,7 +26,7 @@ function Login() {
       login(username);
       navigate('/');
     } catch (error) {
-      navigate('/error');
+      alert("Incorrect username or password");
     }
   };
 

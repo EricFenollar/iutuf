@@ -21,6 +21,13 @@ function Register() {
   const handleRegister = async (e) => {
     e.preventDefault();
 
+    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!regex.test(email)) {
+      alert('Invalid email');
+      return;
+    }
+
     if (password !== passwordConfirm) {
       alert('Password mismatch');
       return;
