@@ -30,7 +30,7 @@ const VideoCard = ({ video }: { video: any }) => {
           }}
         >
           <img
-            src={`${getEnv().API_BASE_URL}/api/videos/thumbnail/${video.id}`}
+            src={`${getEnv().API_BASE_URL}/api/videos/${video.id}/thumbnail`}
             alt={video.title}
             onError={(e) => {
               //Si la imagen falla (404), pone una por defecto
