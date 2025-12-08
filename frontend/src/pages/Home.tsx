@@ -70,8 +70,8 @@ function Home() {
 
           {/* My Profile */}
           {isAuthenticated && (
-            <Link to={username ? `/profile/${username}` : '/profile'} className="login-link">
-              My Profile
+            <Link to={username ? `/upload` : '/profile'} className="login-link">
+              Upload
             </Link>
           )}
 

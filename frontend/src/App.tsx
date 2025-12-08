@@ -16,7 +16,6 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/video/:id" element={<Video />} />
-        <Route path="/profile/:id" element={<UserProfile />} />
         <Route path="/upload" element={<UploadVideo />} />
       </Routes>
     </AuthProvider>
