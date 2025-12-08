@@ -16,10 +16,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class VideosControllerTest {
+class VideoControllerTest {
 
     @InjectMocks
-    private VideosController videosController;
+    private VideoController videosController;
 
     @Mock
     private VideoService videoService;

@@ -30,7 +30,6 @@ public class MvcConfig implements WebMvcConfigurer {
                         "classpath:/META-INF/resources/")
            .setCachePeriod(3600);
     }
-    //这里告诉spring当用户访问media时，去硬板上找文件
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
