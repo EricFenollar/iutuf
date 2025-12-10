@@ -70,11 +70,6 @@ public class AppStartupRunner implements ApplicationRunner {
                                 });
                     }
                 }
-                Path files = baseDir.resolve("files");
-                Path thumbnails = baseDir.resolve("thumbnails");
-
-                Files.createDirectories(files);
-                Files.createDirectories(thumbnails);
 
             } catch (IOException e) {
                 e.printStackTrace();
